@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:ng-template": "node dist/ng-template/server/server.mjs"
+    "serve:ssr:ng-template": "node dist/ng-template/server/server.mjs",
+    "lint": "ng lint",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +25,8 @@
     "@angular/ssr": "^19.0.2",
     "@tailwindcss/postcss": "^4.0.14",
     "express": "^4.18.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.14",
@@ -33,9 +37,12 @@
     "@angular-devkit/build-angular": "^19.0.2",
     "@angular/cli": "^19.0.2",
     "@angular/compiler-cli": "^19.0.0",
+    "@softarc/eslint-plugin-sheriff": "^0.18.0",
+    "@softarc/sheriff-core": "^0.18.0",
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "angular-eslint": "19.2.1",
     "jasmine-core": "~5.4.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
@@ -44,6 +51,13 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "typescript-eslint": "8.26.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,html,scss}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
