@@ -1,3 +1,4 @@
+import { CommonModule, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,24 +6,24 @@ import {
   inject,
   ViewEncapsulation,
 } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
 import { AppLayoutService } from './app-layout.service';
-import { CommonModule, NgClass } from '@angular/common';
 import { SidebarTogglerComponent } from './components/sidebar-toggler.component';
 
 @Component({
   selector: 'app-app-layout',
-  imports: [RouterOutlet, NgClass, CommonModule, SidebarTogglerComponent],
+  imports: [RouterOutlet, NgClass, CommonModule, SidebarTogglerComponent, RouterLink],
   template: `
-    <header class="topbar-area">
+    <header class="topbar-area px-4 py-2">
       <app-sidebar-toggler />
     </header>
-    <aside
-      class="sidebar-area bg-slate-200 outline outline-slate-300"
-      [ngClass]="sidebarClass()"
-    >
+    <aside class="sidebar-area bg-slate-200" [ngClass]="sidebarClass()">
       <div *ngIf="!isSidebarCollapsed()">Sidebar Content Here</div>
       <div *ngIf="isSidebarCollapsed()" class="font-bold text-red-500">Icons Here</div>
+      <a routerLink="settings" class="cursor-pointer font-bold text-nowrap"
+        >IR A SETTINGS</a
+      >
     </aside>
     <main class="main-area scrollbar-thin">
       <router-outlet />
@@ -38,37 +39,44 @@ import { SidebarTogglerComponent } from './components/sidebar-toggler.component'
       grid-template-columns: auto 1fr;
 
       .sidebar-area {
-        width: 250px;
         grid-area: sidebar;
+
+        width: 250px;
+        margin: 0.5rem;
+        border-radius: 0.5rem;
 
         position: relative;
         overflow: hidden;
 
-        transition: width 0.3s;
+        transition: all 0.3s;
 
         &.static {
           width: 250px;
+
+          &.static-inactive {
+            width: 0;
+            margin: 0;
+            border-radius: 0;
+          }
+
+          &.static-collapse {
+            width: 60px;
+          }
         }
 
         &.overlay {
           width: 0;
+          margin: 0;
+          border-radius: 0;
 
           position: fixed;
           top: 0;
           left: 0;
           bottom: 0;
-        }
 
-        &.overlay-active {
-          width: 250px;
-        }
-
-        &.static-inactive {
-          width: 0;
-        }
-
-        &.static-inactive.collapsed {
-          width: 60px;
+          &.overlay-active {
+            width: 250px;
+          }
         }
       }
 
@@ -94,13 +102,15 @@ import { SidebarTogglerComponent } from './components/sidebar-toggler.component'
 
         .sidebar-area {
           width: 0;
+          margin: 0;
+          border-radius: 0;
 
           position: fixed;
           top: 0;
           left: 0;
           bottom: 0;
 
-          transition: width 0.3s;
+          transition: all 0.3s;
 
           &.mobile-active {
             width: 250px;
@@ -119,17 +129,13 @@ import { SidebarTogglerComponent } from './components/sidebar-toggler.component'
 })
 export class AppLayoutComponent {
   private layoutService = inject(AppLayoutService);
+
   private layoutState = computed(() => this.layoutService.layoutState());
   private layoutConfig = computed(() => this.layoutService.layoutConfig());
-
-  isSidebarCollapsed = computed(
-    () =>
-      this.layoutState().staticMenuDesktopInactive &&
-      this.layoutService.layoutConfig().menuMode === 'static'
-  );
+  isSidebarCollapsed = computed(() => this.layoutService.isSidebarCollapsed());
 
   sidebarClass = computed(() => {
-    const { menuMode } = this.layoutConfig();
+    const { menuMode, collapse } = this.layoutConfig();
     const { overlayMenuActive, staticMenuDesktopInactive, staticMenuMobileActive } =
       this.layoutState();
     const isDesktop = this.layoutService.isDesktop();
@@ -138,11 +144,11 @@ export class AppLayoutComponent {
     return {
       overlay: menuMode === 'overlay',
       'overlay-active': overlayMenuActive,
-      static: isStatic,
-      'static-inactive': staticMenuDesktopInactive && isStatic && isDesktop,
+      static: isStatic && isDesktop,
+      'static-inactive': !collapse && staticMenuDesktopInactive && isStatic && isDesktop,
+      'static-collapse': collapse && staticMenuDesktopInactive && isStatic && isDesktop,
       'mobile-active': staticMenuMobileActive && isStatic && !isDesktop,
       'mobile-inactive': !staticMenuMobileActive && isStatic && !isDesktop,
-      collapsed: staticMenuDesktopInactive && isStatic && isDesktop,
     };
   });
 }

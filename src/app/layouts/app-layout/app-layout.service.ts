@@ -6,7 +6,8 @@ export interface LayoutConfig {
   primary?: string;
   surface?: string | undefined | null;
   darkTheme?: boolean;
-  menuMode?: string;
+  menuMode?: 'static' | 'overlay';
+  collapse?: boolean;
 }
 
 interface LayoutState {
@@ -34,6 +35,7 @@ export class AppLayoutService {
     surface: null,
     darkTheme: false,
     menuMode: 'static',
+    collapse: true,
   };
 
   private _state: LayoutState = {
@@ -57,6 +59,14 @@ export class AppLayoutService {
   isSidebarActive = computed(
     () =>
       this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive
+  );
+
+  isSidebarCollapsed = computed(
+    () =>
+      this.layoutState().staticMenuDesktopInactive &&
+      this.layoutConfig().menuMode === 'static' &&
+      this.layoutConfig().collapse &&
+      this.isDesktop()
   );
 
   isDarkTheme = computed(() => this.layoutConfig().darkTheme);
