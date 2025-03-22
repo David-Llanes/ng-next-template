@@ -1,4 +1,4 @@
-import { CommonModule, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,10 +14,10 @@ import { TopbarComponent } from './components/topbar.component';
 
 @Component({
   selector: 'app-app-layout',
-  imports: [RouterOutlet, NgClass, CommonModule, SidebarComponent, TopbarComponent],
+  imports: [RouterOutlet, NgClass, SidebarComponent, TopbarComponent],
   template: `
     <app-topbar class="topbar-area" />
-    <app-sidebar class="sidebar-area bg-sky-100" [ngClass]="sidebarClass()" />
+    <app-sidebar class="sidebar-area" [ngClass]="sidebarClass()" />
     <main class="main-area scrollbar-thin">
       <router-outlet />
     </main>
@@ -25,7 +25,7 @@ import { TopbarComponent } from './components/topbar.component';
   styleUrl: './app-layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { class: 'app-layout h-svh max-h-svh overflow-hidden relative isolate' },
+  host: { class: 'app-layout h-svh max-h-svh overflow-hidden' },
 })
 export class AppLayoutComponent {
   private layoutService = inject(AppLayoutService);
@@ -34,20 +34,21 @@ export class AppLayoutComponent {
   private layoutConfig = computed(() => this.layoutService.layoutConfig());
 
   sidebarClass = computed(() => {
-    const { menuMode, collapse } = this.layoutConfig();
+    const { menuMode, collapse, floatingMenu } = this.layoutConfig();
     const { overlayMenuActive, staticMenuDesktopInactive, staticMenuMobileActive } =
       this.layoutState();
     const isDesktop = this.layoutService.isDesktop();
     const isStatic = menuMode === 'static';
 
     return {
-      overlay: menuMode === 'overlay',
-      'overlay-active': overlayMenuActive,
-      static: isStatic && isDesktop,
+      static: isStatic && isDesktop && !staticMenuDesktopInactive,
       'static-inactive': !collapse && staticMenuDesktopInactive && isStatic && isDesktop,
       'static-collapse': collapse && staticMenuDesktopInactive && isStatic && isDesktop,
+      'static-floating': floatingMenu && isStatic && isDesktop,
       'mobile-active': staticMenuMobileActive && isStatic && !isDesktop,
       'mobile-inactive': !staticMenuMobileActive && isStatic && !isDesktop,
+      overlay: menuMode === 'overlay',
+      'overlay-active': overlayMenuActive,
     };
   });
 }

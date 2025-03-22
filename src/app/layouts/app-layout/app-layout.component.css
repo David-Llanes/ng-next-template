@@ -1,3 +1,11 @@
+:root {
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 60px;
+  --sidebar-margin: 0.5rem;
+  --sidebar-border-radius: 0.5rem;
+  --sidebar-transition: all 1s ease-out;
+}
+
 .app-layout {
   display: grid;
   grid-template-areas:
@@ -5,58 +13,64 @@
     'sidebar main';
   grid-template-rows: 60px 1fr;
   grid-template-columns: auto 1fr;
+}
 
-  .sidebar-area {
-    grid-area: sidebar;
+.topbar-area {
+  grid-area: topbar;
+}
 
-    width: 250px;
-    margin: 0.5rem;
-    border-radius: 0.5rem;
+.main-area {
+  grid-area: main;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
-    position: relative;
-    overflow: hidden;
+.sidebar-area {
+  grid-area: sidebar;
+  width: var(--sidebar-width);
+  margin: 0;
 
-    transition: all 0.3s;
+  border-radius: 0;
+  overflow: hidden;
+  transition: var(--sidebar-transition);
+}
 
-    &.static {
-      width: 250px;
+.sidebar-area.static {
+  width: var(--sidebar-width);
+  visibility: visible;
+}
 
-      &.static-inactive {
-        width: 0;
-        margin: 0;
-        border-radius: 0;
-      }
+.sidebar-area.static-inactive {
+  width: 0;
+  visibility: hidden;
+}
 
-      &.static-collapse {
-        width: 60px;
-      }
-    }
+.sidebar-area.static-collapse {
+  width: var(--sidebar-collapsed-width);
+  visibility: visible;
+}
 
-    &.overlay {
-      width: 0;
-      margin: 0;
-      border-radius: 0;
+.sidebar-area.static-floating {
+  margin: var(--sidebar-margin);
+  border-radius: var(--sidebar-border-radius);
+}
 
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
+.sidebar-area.overlay {
+  width: 0;
+  margin: 0;
 
-      &.overlay-active {
-        width: 250px;
-      }
-    }
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
 
-  .topbar-area {
-    grid-area: topbar;
-  }
+  border-radius: 0;
+  visibility: hidden;
+}
 
-  .main-area {
-    grid-area: main;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+.sidebar-area.overlay-active {
+  width: var(--sidebar-width);
+  visibility: visible;
 }
 
 @media (width < 48rem) {
@@ -67,26 +81,26 @@
       'main';
     grid-template-rows: 80px auto 1fr;
     grid-template-columns: unset;
+  }
 
-    .sidebar-area {
-      width: 0;
-      margin: 0;
-      border-radius: 0;
+  .sidebar-area {
+    width: 0;
+    margin: 0;
 
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
 
-      transition: all 0.3s;
+    border-radius: 0;
+    transition: var(--sidebar-transition);
+  }
 
-      &.mobile-active {
-        width: 250px;
-      }
+  .sidebar-area.mobile-active {
+    width: var(--sidebar-width);
+  }
 
-      &.mobile-inactive {
-        width: 0;
-      }
-    }
+  .sidebar-area.mobile-inactive {
+    width: 0;
   }
 }
