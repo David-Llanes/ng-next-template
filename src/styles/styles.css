@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @utility wrapper {
-  @apply mx-auto max-w-7xl px-4;
+  @apply mx-auto size-full max-w-7xl px-4;
 }
 
 @utility scrollbar-thin {
@@ -9,5 +9,5 @@
 }
 
 .page {
-  @apply block h-full py-6;
+  @apply flex flex-col py-6;
 }

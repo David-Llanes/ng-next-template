@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AppLayoutService } from '../app-layout.service';
+import { SidebarService } from '../sidebar.service';
 
 @Component({
   selector: 'app-sidebar-toggler',
@@ -26,10 +26,10 @@ import { AppLayoutService } from '../app-layout.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarTogglerComponent {
-  private layoutService = inject(AppLayoutService);
+  private sidebarService = inject(SidebarService);
 
   toggleSidebar() {
-    this.layoutService.onMenuToggle();
-    console.log(this.layoutService.layoutState());
+    this.sidebarService.toggleSidebar();
+    console.log(this.sidebarService.sidebarState());
   }
 }

@@ -1,54 +1,29 @@
-import { NgClass } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { AppLayoutService } from './app-layout.service';
+import { SidebarInsetComponent } from './components/sidebar-inset.component';
 import { SidebarComponent } from './components/sidebar.component';
 import { TopbarComponent } from './components/topbar.component';
 
 @Component({
   selector: 'app-app-layout',
-  imports: [RouterOutlet, NgClass, SidebarComponent, TopbarComponent],
+  imports: [RouterOutlet, SidebarComponent, TopbarComponent, SidebarInsetComponent],
   template: `
     <app-topbar class="topbar-area" />
-    <app-sidebar class="sidebar-area" [ngClass]="sidebarClass()" />
-    <main class="main-area scrollbar-thin">
-      <router-outlet />
-    </main>
+    <app-sidebar class="sidebar-area" />
+    <app-sidebar-inset class="main-area">
+      <main class="flex min-h-full flex-col">
+        <router-outlet />
+      </main>
+    </app-sidebar-inset>
   `,
   styleUrl: './app-layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { class: 'app-layout h-svh max-h-svh overflow-hidden' },
 })
-export class AppLayoutComponent {
-  private layoutService = inject(AppLayoutService);
+export class AppLayoutComponent {}
 
-  private layoutState = computed(() => this.layoutService.layoutState());
-  private layoutConfig = computed(() => this.layoutService.layoutConfig());
-
-  sidebarClass = computed(() => {
-    const { menuMode, collapse, floatingMenu } = this.layoutConfig();
-    const { overlayMenuActive, staticMenuDesktopInactive, staticMenuMobileActive } =
-      this.layoutState();
-    const isDesktop = this.layoutService.isDesktop();
-    const isStatic = menuMode === 'static';
-
-    return {
-      static: isStatic && isDesktop && !staticMenuDesktopInactive,
-      'static-inactive': !collapse && staticMenuDesktopInactive && isStatic && isDesktop,
-      'static-collapse': collapse && staticMenuDesktopInactive && isStatic && isDesktop,
-      'static-floating': floatingMenu && isStatic && isDesktop,
-      'mobile-active': staticMenuMobileActive && isStatic && !isDesktop,
-      'mobile-inactive': !staticMenuMobileActive && isStatic && !isDesktop,
-      overlay: menuMode === 'overlay',
-      'overlay-active': overlayMenuActive,
-    };
-  });
-}
+// ? SIEMPRE QUE SE USA <router-outlet/>, si el padre tiene flex, debe de ser flex-col.
+// ? ¿POR QUE?. Porque RouterOurlet renderiza un elemento vacio y como hermano renderiza el contenido del slot.
+// ? Ademas, se recomienza que el componente que se renderizara en el routerOutlet tenga en host: "{ class: 'grow' }" o "{ class: 'flex-1' }"

@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { AppLayoutService } from '../app-layout.service';
+import { SidebarService } from '../sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
   imports: [RouterLink],
   template: `
-    <aside class="relative z-100 size-full bg-slate-100">
+    <aside class="relative z-10 size-full bg-slate-100">
       @if (isSidebarCollapsed()) {
         <div class="font-bold text-red-500">Icons Here</div>
       } @else {
@@ -18,38 +18,44 @@ import { AppLayoutService } from '../app-layout.service';
       >
     </aside>
 
-    @if (isOpen) {
-      <button class="fixed inset-0 -z-10 size-full bg-black/15" (click)="closeMenu()">
+    @if (isOverlayActive()) {
+      <button class="fixed inset-0 bg-blue-500/50" (click)="closeMenu()">
         <div></div>
       </button>
     }
   `,
-  styles: `
-    .sidebar-overlay {
-      position: fixed;
-      inset: 0;
-
-      background-color: hsla(0, 0%, 0%, 0.5);
-
-      @media (min-width: 768px) {
-        display: none;
-      }
-    }
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'isolate relative' },
+  host: {
+    class: 'isolate relative',
+    '[class.static-active]': 'sidebarClass()["static-active"]',
+    '[class.static-inactive]': 'sidebarClass()["static-inactive"]',
+    '[class.static-collapsed]': 'sidebarClass()["static-collapsed"]',
+    '[class.static-floating]': 'sidebarClass()["static-floating"]',
+    '[class.mobile-active]': 'sidebarClass()["mobile-active"]',
+    '[class.mobile-inactive]': 'sidebarClass()["mobile-inactive"]',
+    '[class.overlay]': 'sidebarClass()["overlay"]',
+    '[class.overlay-active]': 'sidebarClass()["overlay-active"]',
+    '[class.overlay-inactive]': 'sidebarClass()["overlay-inactive"]',
+  },
 })
 export class SidebarComponent {
-  private layoutService = inject(AppLayoutService);
+  private sidebarService = inject(SidebarService);
 
-  get isOpen() {
-    return this.layoutService.isOverlayActive();
+  get isOverlayActive() {
+    return this.sidebarService.isOverlayActive;
+  }
+
+  get isSidebarCollapsed() {
+    return this.sidebarService.isSidebarCollapsed;
+  }
+
+  get sidebarClass() {
+    return this.sidebarService.sidebarClass;
   }
 
   closeMenu() {
-    this.layoutService.onMenuToggle();
-    console.log(this.layoutService.layoutState());
+    this.sidebarService.toggleSidebar();
+    console.log(this.sidebarService.sidebarState());
   }
-
-  isSidebarCollapsed = computed(() => this.layoutService.isSidebarCollapsed());
 }

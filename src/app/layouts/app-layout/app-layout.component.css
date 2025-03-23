@@ -3,7 +3,7 @@
   --sidebar-collapsed-width: 60px;
   --sidebar-margin: 0.5rem;
   --sidebar-border-radius: 0.5rem;
-  --sidebar-transition: all 1s ease-out;
+  --sidebar-transition: all 0.3s ease-out;
 }
 
 .app-layout {
@@ -17,60 +17,55 @@
 
 .topbar-area {
   grid-area: topbar;
+  overflow: hidden;
 }
 
 .main-area {
   grid-area: main;
+
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .sidebar-area {
   grid-area: sidebar;
-  width: var(--sidebar-width);
-  margin: 0;
+  width: 0;
 
-  border-radius: 0;
   overflow: hidden;
   transition: var(--sidebar-transition);
 }
 
-.sidebar-area.static {
-  width: var(--sidebar-width);
+:is(.overlay, .sidebar-area, .static-inactive) {
+  margin: 0;
+  border-radius: 0;
+}
+
+:is(.static-active, .overlay.overlay-active, .mobile-active) {
+  width: var(--sidebar-width) !important;
   visibility: visible;
 }
 
-.sidebar-area.static-inactive {
-  width: 0;
+:is(.static-inactive, .overlay.overlay-inactive, .mobile-inactive) {
+  width: 0 !important;
   visibility: hidden;
 }
 
-.sidebar-area.static-collapse {
+.static-collapsed {
   width: var(--sidebar-collapsed-width);
   visibility: visible;
 }
 
-.sidebar-area.static-floating {
+.static-floating {
   margin: var(--sidebar-margin);
   border-radius: var(--sidebar-border-radius);
 }
 
-.sidebar-area.overlay {
-  width: 0;
-  margin: 0;
-
+.overlay {
+  width: 0 !important;
   position: fixed;
-  top: 0;
+  inset-block: 0;
   left: 0;
-  bottom: 0;
-
-  border-radius: 0;
-  visibility: hidden;
-}
-
-.sidebar-area.overlay-active {
-  width: var(--sidebar-width);
-  visibility: visible;
 }
 
 @media (width < 48rem) {
@@ -79,28 +74,15 @@
       'topbar'
       'sidebar'
       'main';
-    grid-template-rows: 80px auto 1fr;
+    grid-template-rows: 60px auto 1fr;
     grid-template-columns: unset;
   }
 
   .sidebar-area {
     width: 0;
-    margin: 0;
 
     position: fixed;
-    top: 0;
+    inset-block: 0;
     left: 0;
-    bottom: 0;
-
-    border-radius: 0;
-    transition: var(--sidebar-transition);
-  }
-
-  .sidebar-area.mobile-active {
-    width: var(--sidebar-width);
-  }
-
-  .sidebar-area.mobile-inactive {
-    width: 0;
   }
 }
