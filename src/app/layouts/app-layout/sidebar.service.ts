@@ -23,6 +23,8 @@ interface SidebarConfig {
   collapse?: boolean;
   floating?: boolean;
   rail?: boolean;
+  initialStaticDesktopActive?: boolean; // Nuevo campo para la configuración inicial
+  initialHoverActive?: boolean; // Nuevo campo para la configuración inicial
 }
 
 @Injectable({
@@ -32,18 +34,20 @@ export class SidebarService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly mediaQueryService = inject(MediaQueryService);
 
-  readonly #state: SidebarState = {
-    staticDesktopActive: false,
-    staticMobileActive: false,
-    overlayActive: false,
-    hoverActive: false,
-  };
-
   readonly #defaultConfig: SidebarConfig = {
     mode: 'static',
     collapse: true,
     floating: false,
     rail: false,
+    initialStaticDesktopActive: false,
+    initialHoverActive: false,
+  };
+
+  readonly #state: SidebarState = {
+    staticDesktopActive: this.loadConfig().initialStaticDesktopActive,
+    staticMobileActive: false,
+    overlayActive: false,
+    hoverActive: this.loadConfig().initialHoverActive,
   };
 
   public sidebarState = signal<SidebarState>(this.#state);
@@ -173,12 +177,32 @@ export class SidebarService {
     );
   }
 
+  public setInitialStaticDesktopActive(value: boolean) {
+    this.sidebarConfig.update(
+      prev => ({ ...prev, initialStaticDesktopActive: value }) satisfies SidebarConfig
+    );
+    this.sidebarState.update(prev => ({ ...prev, staticDesktopActive: value }));
+  }
+
+  public setInitialHoverActive(value: boolean) {
+    this.sidebarConfig.update(
+      prev => ({ ...prev, initialHoverActive: value }) satisfies SidebarConfig
+    );
+    this.sidebarState.update(prev => ({ ...prev, hoverActive: value }));
+  }
+
   public resetSidebarConfig() {
+    this.sidebarConfig.set(this.#defaultConfig);
+    this.sidebarState.set({
+      staticDesktopActive: this.#defaultConfig.initialStaticDesktopActive,
+      staticMobileActive: false,
+      overlayActive: false,
+      hoverActive: this.#defaultConfig.initialHoverActive,
+    });
+
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('sidebarConfig');
     }
-
-    this.sidebarConfig.set(this.#defaultConfig);
   }
 
   private loadConfig(): SidebarConfig {
