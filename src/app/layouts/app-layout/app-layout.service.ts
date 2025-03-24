@@ -9,11 +9,15 @@ import {
   untracked,
 } from '@angular/core';
 
+type FloatingMode = 'sidebar' | 'inset' | 'none';
+
 export interface LayoutConfig {
   preset?: string;
   primary?: string;
   surface?: string | undefined | null;
   darkTheme?: boolean;
+  floatingMode?: FloatingMode;
+  stickyHeader?: boolean;
 }
 
 @Injectable({
@@ -27,6 +31,8 @@ export class AppLayoutService {
     primary: 'emerald',
     surface: null,
     darkTheme: false,
+    floatingMode: 'inset',
+    stickyHeader: false,
   };
 
   private initialized = false;
@@ -38,17 +44,21 @@ export class AppLayoutService {
   public isDarkTheme = computed(() => this.layoutConfig().darkTheme);
   public getPrimary = computed(() => this.layoutConfig().primary);
   public getSurface = computed(() => this.layoutConfig().surface);
+  public isStickyHeader = computed(() => this.layoutConfig().stickyHeader);
+  public floatingMode = computed(() => this.layoutConfig().floatingMode);
 
   constructor() {
     effect(() => {
-      const config = this.layoutConfig();
+      this.isDarkTheme();
 
       untracked(() => {
+        const config = this.layoutConfig();
+
         // Sale antes de llamar a handleDarkModeTransition si no esta inicializado
-        if (!this.initialized || !config) {
-          this.initialized = true;
-          return;
-        }
+        // if (!this.initialized || !config) {
+        //   this.initialized = true;
+        //   return;
+        // }
 
         this.handleDarkModeTransition(config);
       });
@@ -66,6 +76,30 @@ export class AppLayoutService {
         }
       });
     });
+  }
+
+  public setFloatingMode(value: FloatingMode) {
+    this.layoutConfig.update(
+      prev => ({ ...prev, floatingMode: value }) satisfies LayoutConfig
+    );
+  }
+
+  public setStickyHeader(value: boolean) {
+    this.layoutConfig.update(
+      prev => ({ ...prev, stickyHeader: value }) satisfies LayoutConfig
+    );
+  }
+
+  public setDarkTheme() {
+    this.layoutConfig.update(
+      prev => ({ ...prev, darkTheme: true }) satisfies LayoutConfig
+    );
+  }
+
+  public setLightTheme() {
+    this.layoutConfig.update(
+      prev => ({ ...prev, darkTheme: false }) satisfies LayoutConfig
+    );
   }
 
   private loadConfig(): LayoutConfig {

@@ -21,7 +21,6 @@ interface SidebarState {
 interface SidebarConfig {
   mode?: 'static' | 'overlay';
   collapse?: boolean;
-  floating?: boolean;
   rail?: boolean;
   initialStaticDesktopActive?: boolean; // Nuevo campo para la configuración inicial
   initialHoverActive?: boolean; // Nuevo campo para la configuración inicial
@@ -37,7 +36,6 @@ export class SidebarService {
   readonly #defaultConfig: SidebarConfig = {
     mode: 'static',
     collapse: true,
-    floating: false,
     rail: false,
     initialStaticDesktopActive: false,
     initialHoverActive: false,
@@ -58,7 +56,7 @@ export class SidebarService {
   public isStatic = computed(() => this.sidebarConfig().mode === 'static');
 
   public sidebarClass = computed(() => {
-    const { mode, collapse, floating } = this.sidebarConfig();
+    const { mode, collapse } = this.sidebarConfig();
     const { overlayActive, staticDesktopActive, staticMobileActive } =
       this.sidebarState();
     const isDesktop = this.isDesktop();
@@ -66,14 +64,15 @@ export class SidebarService {
     const isOverlayMode = mode === 'overlay';
 
     const staticInactive = !collapse && !staticDesktopActive && isStaticMode && isDesktop;
+    const isMobile = isStaticMode && !isDesktop;
 
     return {
       'static-active': isStaticMode && isDesktop && staticDesktopActive,
       'static-inactive': staticInactive,
       'static-collapsed': collapse && !staticDesktopActive && isStaticMode && isDesktop,
-      'static-floating': floating && isStaticMode && isDesktop && !staticInactive,
-      'mobile-active': staticMobileActive && isStaticMode && !isDesktop,
-      'mobile-inactive': !staticMobileActive && isStaticMode && !isDesktop,
+      mobile: isMobile,
+      'mobile-active': staticMobileActive && isMobile,
+      'mobile-inactive': !staticMobileActive && isMobile,
       overlay: isOverlayMode,
       'overlay-active': isOverlayMode && overlayActive,
       'overlay-inactive': isOverlayMode && !overlayActive,
@@ -168,12 +167,6 @@ export class SidebarService {
   public setCollapseIntoIcons(value: boolean) {
     this.sidebarConfig.update(
       prev => ({ ...prev, collapse: value }) satisfies SidebarConfig
-    );
-  }
-
-  public setFloatingSidebar(value: boolean) {
-    this.sidebarConfig.update(
-      prev => ({ ...prev, floating: value }) satisfies SidebarConfig
     );
   }
 

@@ -5,7 +5,9 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-settings-layout',
   imports: [RouterOutlet],
   template: `
-    <div class="sticky top-0 h-20 shrink-0 place-content-center bg-blue-200 text-center">
+    <div
+      class="bg-background sticky top-0 h-20 shrink-0 place-content-center text-center"
+    >
       THIS CAN BE STICKY
     </div>
     <div class="flex grow flex-col">

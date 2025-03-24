@@ -5,8 +5,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   imports: [],
   template: `
     <div class="wrapper grid grow content-start gap-4">
-      @for (item of [1, 2, 3, 4, 5]; track $index) {
-        <div class="h-40 bg-gray-300">{{ item }}</div>
+      @for (item of [1, 2, 3, 4, 5, 6]; track $index) {
+        <div class="bg-card h-40 rounded-xl border"></div>
       }
     </div>
   `,
