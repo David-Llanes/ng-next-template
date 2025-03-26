@@ -117,7 +117,7 @@
 
 /* Utilities */
 * {
-  @apply border-border outline-border;
+  @apply border-border outline-border scrollbar-thin;
 }
 body {
   @apply bg-background text-foreground font-sans text-base antialiased;
@@ -127,7 +127,7 @@ body {
 }
 
 @utility wrapper {
-  @apply mx-auto size-full px-4;
+  @apply mx-auto w-full px-4;
 }
 
 @utility scrollbar-thin {

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 
+import { AppLayoutService } from '../app-layout.service';
 import { SidebarService } from '../sidebar.service';
 import { SidebarTogglerComponent } from './sidebar-toggler.component';
-import { AppLayoutService } from '../app-layout.service';
 
 @Component({
   selector: 'app-topbar',
@@ -63,24 +63,6 @@ import { AppLayoutService } from '../app-layout.service';
           FLEX
         </button>
         <button
-          class="cursor-pointer rounded-lg bg-purple-700 p-1 text-white"
-          (click)="this.layoutService.setFloatingMode('inset')"
-        >
-          INSET
-        </button>
-        <button
-          class="cursor-pointer rounded-lg bg-purple-700 p-1 text-white"
-          (click)="this.layoutService.setFloatingMode('sidebar')"
-        >
-          SIDEB
-        </button>
-        <button
-          class="cursor-pointer rounded-lg bg-purple-700 p-1 text-white"
-          (click)="this.layoutService.setFloatingMode('none')"
-        >
-          NONE
-        </button>
-        <button
           class="cursor-pointer rounded-lg bg-slate-700 p-1 text-white"
           (click)="this.layoutService.setDarkTheme()"
         >
@@ -99,7 +81,11 @@ import { AppLayoutService } from '../app-layout.service';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopbarComponent {
+export class TopbarComponent implements OnInit {
   sidebarService = inject(SidebarService);
   layoutService = inject(AppLayoutService);
+
+  ngOnInit(): void {
+    console.log('Topbar initialized');
+  }
 }

@@ -22,8 +22,8 @@ interface SidebarConfig {
   mode?: 'static' | 'overlay';
   collapse?: boolean;
   rail?: boolean;
-  initialStaticDesktopActive?: boolean; // Nuevo campo para la configuración inicial
-  initialHoverActive?: boolean; // Nuevo campo para la configuración inicial
+  initialStaticDesktopActive?: boolean;
+  initialHoverActive?: boolean;
 }
 
 @Injectable({
@@ -55,7 +55,8 @@ export class SidebarService {
   public isOverlay = computed(() => this.sidebarConfig().mode === 'overlay');
   public isStatic = computed(() => this.sidebarConfig().mode === 'static');
 
-  public sidebarClass = computed(() => {
+  // DE AQUI SE SACA EL ESTADO ACTUAL DEL SIDEBAR PARA SUS DIFERENTES VARIANTES
+  public currentSidebarState = computed(() => {
     const { mode, collapse } = this.sidebarConfig();
     const { overlayActive, staticDesktopActive, staticMobileActive } =
       this.sidebarState();
@@ -67,40 +68,32 @@ export class SidebarService {
     const isMobile = isStaticMode && !isDesktop;
 
     return {
-      'static-active': isStaticMode && isDesktop && staticDesktopActive,
-      'static-inactive': staticInactive,
-      'static-collapsed': collapse && !staticDesktopActive && isStaticMode && isDesktop,
-      mobile: isMobile,
-      'mobile-active': staticMobileActive && isMobile,
-      'mobile-inactive': !staticMobileActive && isMobile,
-      overlay: isOverlayMode,
-      'overlay-active': isOverlayMode && overlayActive,
-      'overlay-inactive': isOverlayMode && !overlayActive,
+      isDesktopActive: isStaticMode && isDesktop && staticDesktopActive,
+      isDesktopInactive: staticInactive,
+      isDesktopCollapsed: collapse && !staticDesktopActive && isStaticMode && isDesktop,
+      isMobile,
+      isMobileActive: staticMobileActive && isMobile,
+      isMobileInactive: !staticMobileActive && isMobile,
+      isOverlay: isOverlayMode,
+      isOverlayActive: isOverlayMode && overlayActive,
+      isOverlayInactive: isOverlayMode && !overlayActive,
     };
   });
 
-  public isOverlayActive = computed<boolean>(() => {
-    if (this.isStatic()) {
-      if (this.isDesktop()) {
-        return false;
-      }
+  public isCollapsed = computed(() => this.currentSidebarState().isDesktopCollapsed);
 
-      // Si esta en modo static y es mobile
-      return !!this.sidebarState().staticMobileActive;
-    } else if (this.isOverlay()) {
-      return !!this.sidebarState().overlayActive;
-    } else {
-      return false;
-    }
+  public isClosed = computed(() => {
+    const { isDesktopActive, isDesktopCollapsed, isMobileActive, isOverlayActive } =
+      this.currentSidebarState();
+
+    return !isDesktopActive && !isDesktopCollapsed && !isMobileActive && !isOverlayActive;
   });
 
-  public isSidebarCollapsed = computed(
-    () =>
-      !this.sidebarState().staticDesktopActive &&
-      this.sidebarConfig().mode === 'static' &&
-      this.sidebarConfig().collapse &&
-      this.isDesktop()
-  );
+  public isOverlayActive = computed<boolean>(() => {
+    const { isMobileActive, isOverlayActive } = this.currentSidebarState();
+
+    return isMobileActive! || isOverlayActive!;
+  });
 
   constructor() {
     // Guardar en el localStorage la configuracion SOLO en el navegador
