@@ -14,6 +14,7 @@ import { AppLayoutService } from './app-layout.service';
 import { SidebarComponent } from './components/sidebar.component';
 import { TopbarComponent } from './components/topbar.component';
 
+// TODO: SEGUIR MEJORANDO LOS SERVICIOS Y METERLE LAS CLASES AL ASIDE, NO AL app-sidebar
 @Component({
   selector: 'app-app-layout',
   imports: [RouterOutlet, SidebarComponent, TopbarComponent, NgTemplateOutlet, NgClass],
@@ -36,13 +37,13 @@ import { TopbarComponent } from './components/topbar.component';
       <!-- XD -->
       <div
         class="isolate flex h-svh max-h-svh overflow-hidden"
-        [ngClass]="{ 'flex-col': stickyHeader() }"
+        [ngClass]="{ 'flex-col': layoutMode() === 'col' }"
       >
         <ng-container [ngTemplateOutlet]="outerComponent()!" />
 
         <div
           class="flex flex-1 overflow-hidden"
-          [ngClass]="{ 'flex-col': !stickyHeader() }"
+          [ngClass]="{ 'flex-col': layoutMode() === 'row' }"
         >
           <ng-container [ngTemplateOutlet]="innerComponent()!" />
           <ng-container [ngTemplateOutlet]="content()" />
@@ -57,16 +58,16 @@ import { TopbarComponent } from './components/topbar.component';
 export class AppLayoutComponent {
   layoutService = inject(AppLayoutService);
 
-  stickyHeader = this.layoutService.stickyHeader;
+  layoutMode = this.layoutService.layoutMode;
 
   sidebar = viewChild.required<TemplateRef<unknown>>('sidebar');
   topbar = viewChild.required<TemplateRef<unknown>>('topbar');
   content = viewChild.required<TemplateRef<unknown>>('main');
 
   outerComponent = computed(() => {
-    if (this.stickyHeader() === undefined) return undefined;
+    if (this.layoutMode() === undefined) return undefined;
 
-    if (this.stickyHeader()) {
+    if (this.layoutMode() === 'col') {
       return this.topbar();
     } else {
       return this.sidebar();
@@ -74,9 +75,9 @@ export class AppLayoutComponent {
   });
 
   innerComponent = computed(() => {
-    if (this.stickyHeader() === undefined) return undefined;
+    if (this.layoutMode() === undefined) return undefined;
 
-    if (this.stickyHeader()) {
+    if (this.layoutMode() === 'col') {
       return this.sidebar();
     } else {
       return this.topbar();

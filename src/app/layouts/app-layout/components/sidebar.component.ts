@@ -15,39 +15,53 @@ import { SidebarService } from '../sidebar.service';
   selector: 'app-sidebar',
   imports: [RouterLink, NgClass],
   template: `
-    <aside class="bg-sidebar relative z-10 size-full overflow-hidden">
-      @if (isCollapsed()) {
-        <div class="font-bold text-red-500">Icons Here</div>
-      } @else {
-        <div class="text-nowrap">Sidebar Content Here</div>
-      }
-      <a routerLink="settings" class="cursor-pointer font-bold text-nowrap"
-        >IR A SETTINGS</a
-      >
-    </aside>
-
-    <button
-      class="group absolute inset-y-0 left-full w-2.5 cursor-e-resize bg-transparent"
-      [ngClass]="{ 'hover:bg-muted': isClosed() }"
-      aria-details="Resize Sidebar"
-      (click)="toggleSidebar()"
-      aria-label="Alternar menu"
-      title="Alternar menu"
+    <div
+      id="sidebar"
+      class="relative isolate size-full text-nowrap"
+      [ngClass]="sidebarClass()"
     >
-      <div
-        class="group-hover:bg-border h-full w-px bg-transparent group-hover:w-[2px]"
-      ></div>
-    </button>
+      <aside class="bg-sidebar flex size-full flex-col overflow-hidden">
+        <header class="space-x-2 overflow-hidden p-2">HEADER XD</header>
+        <div class="grow space-y-2 overflow-x-hidden overflow-y-auto p-2">
+          @if (isCollapsed()) {
+            <div class="font-bold text-red-500">Icons Here</div>
+          } @else {
+            @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]; track $index) {
+              <div class="bg-muted h-20 w-full content-center rounded-2xl text-center">
+                {{ item }}
+              </div>
+            }
+          }
+          <a routerLink="settings" class="cursor-pointer font-bold">IR A SETTINGS</a>
+        </div>
+        <footer class="space-x-2 overflow-hidden p-2">FOOTER</footer>
+      </aside>
 
-    @if (isOverlayActive()) {
+      <!-- SIDEBAR RAIL -->
       <button
-        class="fixed inset-0 -z-10"
+        class="group absolute inset-y-0 left-full w-2.5 cursor-e-resize bg-transparent"
+        [ngClass]="{ 'hover:bg-muted': isSidebarClosed() }"
+        aria-details="Resize Sidebar"
         (click)="toggleSidebar()"
-        aria-label="Sidebar Overlay"
+        aria-label="Alternar menu"
+        title="Alternar menu"
       >
-        <div class="size-full bg-black/20"></div>
+        <div
+          class="group-hover:bg-border h-full w-px bg-transparent group-hover:w-[2px]"
+        ></div>
       </button>
-    }
+
+      <!-- SIDEBAR OVERLAY -->
+      @if (isOverlayActive()) {
+        <button
+          class="fixed inset-0 -z-10"
+          (click)="toggleSidebar()"
+          aria-label="Sidebar Overlay"
+        >
+          <div class="size-full bg-black/20"></div>
+        </button>
+      }
+    </div>
   `,
   styles: `
     :root {
@@ -56,7 +70,7 @@ import { SidebarService } from '../sidebar.service';
       --sidebar-transition: width 0.3s ease-out;
     }
 
-    app-sidebar {
+    #sidebar {
       transition: var(--sidebar-transition);
     }
 
@@ -67,9 +81,6 @@ import { SidebarService } from '../sidebar.service';
 
     :is(.static-active, .overlay.overlay-active, .mobile.mobile-active) {
       width: var(--sidebar-width) !important;
-    }
-
-    .mobile-active {
     }
 
     :is(.static-inactive, .overlay.overlay-inactive, .mobile.mobile-inactive) {
@@ -93,17 +104,7 @@ import { SidebarService } from '../sidebar.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'isolate relative size-full',
-    '[class.static-active]': 'sidebarClass()["static-active"]',
-    '[class.static-inactive]': 'sidebarClass()["static-inactive"]',
-    '[class.static-collapsed]': 'sidebarClass()["static-collapsed"]',
-    '[class.static-floating]': 'sidebarClass()["static-floating"]',
-    '[class.mobile]': 'sidebarClass()["mobile"]',
-    '[class.mobile-active]': 'sidebarClass()["mobile-active"]',
-    '[class.mobile-inactive]': 'sidebarClass()["mobile-inactive"]',
-    '[class.overlay]': 'sidebarClass()["overlay"]',
-    '[class.overlay-active]': 'sidebarClass()["overlay-active"]',
-    '[class.overlay-inactive]': 'sidebarClass()["overlay-inactive"]',
+    class: 'isolate relative block',
   },
 })
 export class SidebarComponent implements OnInit {
@@ -113,8 +114,8 @@ export class SidebarComponent implements OnInit {
     console.log('Sidebar initialized');
   }
 
-  get isClosed() {
-    return this.sidebarService.isClosed;
+  get isSidebarClosed() {
+    return this.sidebarService.isSidebarClosed;
   }
 
   get isOverlayActive() {
@@ -153,6 +154,5 @@ export class SidebarComponent implements OnInit {
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
-    console.log(this.sidebarService.sidebarState());
   }
 }

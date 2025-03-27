@@ -8,7 +8,8 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
   selector: 'app-topbar',
   imports: [SidebarTogglerComponent],
   template: `
-    <header class="bg-background flex h-full items-center justify-end px-4 py-2">
+    <header class="bg-background flex h-16 items-center justify-between gap-4 px-4 py-2">
+      <app-sidebar-toggler />
       <div class="mr-2 flex flex-wrap items-center gap-2 text-xs font-semibold">
         <button
           class="bg-primary cursor-pointer rounded-lg p-1"
@@ -26,7 +27,7 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
           class="bg-primary cursor-pointer rounded-lg p-1"
           (click)="
             this.sidebarService.setCollapseIntoIcons(
-              !this.sidebarService.sidebarConfig().collapse
+              !this.sidebarService.sidebarConfig().canCollapse
             )
           "
         >
@@ -52,15 +53,15 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
         </button>
         <button
           class="cursor-pointer rounded-lg bg-green-600 p-1 text-white"
-          (click)="this.layoutService.setStickyHeader(true)"
+          (click)="this.layoutService.setLayoutMode('col')"
         >
-          STICKY
+          COL
         </button>
         <button
           class="cursor-pointer rounded-lg bg-blue-700 p-1 text-white"
-          (click)="this.layoutService.setStickyHeader(false)"
+          (click)="this.layoutService.setLayoutMode('row')"
         >
-          FLEX
+          ROW
         </button>
         <button
           class="cursor-pointer rounded-lg bg-slate-700 p-1 text-white"
@@ -75,7 +76,6 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
           LIGHT
         </button>
       </div>
-      <app-sidebar-toggler />
     </header>
   `,
   styles: ``,

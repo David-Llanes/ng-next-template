@@ -9,12 +9,14 @@ import {
   untracked,
 } from '@angular/core';
 
+type LayoutMode = 'col' | 'row';
+
 export interface LayoutConfig {
   preset?: string;
   primary?: string;
   surface?: string | undefined | null;
   darkTheme?: boolean;
-  stickyHeader?: boolean;
+  layoutMode?: LayoutMode;
 }
 
 @Injectable({
@@ -23,12 +25,12 @@ export interface LayoutConfig {
 export class AppLayoutService {
   private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly _defaultConfig: LayoutConfig = {
+  readonly #defaultConfig: LayoutConfig = {
     preset: 'Aura',
     primary: 'emerald',
     surface: null,
     darkTheme: false,
-    stickyHeader: false,
+    layoutMode: 'row',
   };
 
   private initialized = false;
@@ -36,11 +38,10 @@ export class AppLayoutService {
   public layoutConfig = signal<LayoutConfig>(this.loadConfig());
   public transitionComplete = signal<boolean>(false);
 
-  public theme = computed(() => (this.layoutConfig().darkTheme ? 'light' : 'dark'));
-  public isDarkTheme = computed(() => this.layoutConfig().darkTheme);
   public getPrimary = computed(() => this.layoutConfig().primary);
   public getSurface = computed(() => this.layoutConfig().surface);
-  public stickyHeader = computed(() => this.layoutConfig().stickyHeader);
+  public isDarkTheme = computed(() => this.layoutConfig().darkTheme);
+  public layoutMode = computed(() => this.layoutConfig().layoutMode);
 
   constructor() {
     effect(() => {
@@ -49,7 +50,7 @@ export class AppLayoutService {
       untracked(() => {
         const config = this.layoutConfig();
 
-        // Sale antes de llamar a handleDarkModeTransition si no esta inicializado
+        // Si no se ha inicializado, no se hace la transicion
         if (!this.initialized || !config) {
           this.toggleDarkMode(config);
           this.initialized = true;
@@ -60,7 +61,7 @@ export class AppLayoutService {
       });
     });
 
-    // Guardar en el localStorage la configuracion SOLO en el navegador
+    // Guardar en el localStorage la configuracion
     effect(() => {
       const config = this.layoutConfig();
 
@@ -74,15 +75,9 @@ export class AppLayoutService {
     });
   }
 
-  // public setFloatingMode(value: FloatingMode) {
-  //   this.layoutConfig.update(
-  //     prev => ({ ...prev, floatingMode: value }) satisfies LayoutConfig
-  //   );
-  // }
-
-  public setStickyHeader(value: boolean) {
+  public setLayoutMode(value: LayoutMode) {
     this.layoutConfig.update(
-      prev => ({ ...prev, stickyHeader: value }) satisfies LayoutConfig
+      prev => ({ ...prev, layoutMode: value }) satisfies LayoutConfig
     );
   }
 
@@ -101,15 +96,14 @@ export class AppLayoutService {
   private loadConfig(): LayoutConfig {
     if (isPlatformBrowser(this.platformId)) {
       const storedConfig = localStorage.getItem('layoutConfig');
-      return storedConfig ? JSON.parse(storedConfig) : this._defaultConfig;
+      return storedConfig ? JSON.parse(storedConfig) : this.#defaultConfig;
     } else {
-      // En el servidor, devuelve la configuración por defecto
-      return this._defaultConfig;
+      return this.#defaultConfig;
     }
   }
 
-  public reset() {
-    this.layoutConfig.set(this._defaultConfig);
+  public resetConfig() {
+    this.layoutConfig.set(this.#defaultConfig);
 
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('layoutConfig');
@@ -137,8 +131,7 @@ export class AppLayoutService {
         this.onTransitionEnd();
       }
     } else {
-      // No hacer nada en el servidor
-      this.toggleDarkMode(config); // Aplicar la clase aunque sea en el servidor para evitar inconsistencias iniciales
+      this.toggleDarkMode(config);
       this.onTransitionEnd();
     }
   }
