@@ -5,7 +5,6 @@ import {
   inject,
   TemplateRef,
   viewChild,
-  ViewEncapsulation,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -20,11 +19,11 @@ import { TopbarComponent } from './components/topbar.component';
   imports: [RouterOutlet, SidebarComponent, TopbarComponent, NgTemplateOutlet, NgClass],
   template: `
     <ng-template #topbar>
-      <app-topbar class="z-50 shrink-0 border-b" />
+      <app-topbar />
     </ng-template>
 
     <ng-template #sidebar>
-      <app-sidebar class="outline-border z-100 outline" />
+      <app-sidebar [attr.data-mode]="layoutMode()" />
     </ng-template>
 
     <ng-template #main>
@@ -36,7 +35,8 @@ import { TopbarComponent } from './components/topbar.component';
     @defer (when layoutReady()) {
       <!-- XD -->
       <div
-        class="isolate flex h-svh max-h-svh overflow-hidden"
+        style="--sidebar-width:16rem; --sidebar-width-icon:3rem; --topbar-height:4rem;"
+        class="group flex h-svh w-full overflow-hidden"
         [ngClass]="{ 'flex-col': layoutMode() === 'col' }"
       >
         <ng-container [ngTemplateOutlet]="outerComponent()!" />
@@ -53,7 +53,6 @@ import { TopbarComponent } from './components/topbar.component';
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
 })
 export class AppLayoutComponent {
   layoutService = inject(AppLayoutService);

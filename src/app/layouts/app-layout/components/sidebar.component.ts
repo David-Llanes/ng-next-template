@@ -1,155 +1,77 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
-import { NgClass } from '@angular/common';
 import { SidebarService } from '../sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, NgClass],
+  imports: [],
   template: `
     <div
-      id="sidebar"
-      class="relative isolate size-full text-nowrap"
-      [ngClass]="sidebarClass()"
+      class="relative w-[var(--sidebar-width)] bg-transparent transition-[width] duration-200 ease-linear group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)] group-data-[collapsible=offcanvas]:w-0 group-data-[side=right]:rotate-180"
+    ></div>
+    <div
+      class="fixed top-0 bottom-0 left-0 z-10 hidden h-svh w-[var(--sidebar-width)] transition-[left,right,width] duration-200 ease-linear *:overflow-hidden group-data-[collapsible=icon]:w-[var(--sidebar-width-icon)] group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[mode=col]:!top-[var(--topbar-height)] group-data-[mode=col]:h-[calc(100svh-var(--topbar-height))] group-data-[side=left]:border-r group-data-[side=right]:border-l md:flex"
     >
-      <aside class="bg-sidebar flex size-full flex-col overflow-hidden">
-        <header class="space-x-2 overflow-hidden p-2">HEADER XD</header>
-        <div class="grow space-y-2 overflow-x-hidden overflow-y-auto p-2">
-          @if (isCollapsed()) {
-            <div class="font-bold text-red-500">Icons Here</div>
-          } @else {
-            @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]; track $index) {
-              <div class="bg-muted h-20 w-full content-center rounded-2xl text-center">
-                {{ item }}
-              </div>
-            }
-          }
-          <a routerLink="settings" class="cursor-pointer font-bold">IR A SETTINGS</a>
-        </div>
-        <footer class="space-x-2 overflow-hidden p-2">FOOTER</footer>
-      </aside>
-
-      <!-- SIDEBAR RAIL -->
-      <button
-        class="group absolute inset-y-0 left-full w-2.5 cursor-e-resize bg-transparent"
-        [ngClass]="{ 'hover:bg-muted': isSidebarClosed() }"
-        aria-details="Resize Sidebar"
-        (click)="toggleSidebar()"
-        aria-label="Alternar menu"
-        title="Alternar menu"
+      <div
+        data-sidebar="sidebar"
+        class="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow"
       >
-        <div
-          class="group-hover:bg-border h-full w-px bg-transparent group-hover:w-[2px]"
-        ></div>
-      </button>
-
-      <!-- SIDEBAR OVERLAY -->
-      @if (isOverlayActive()) {
-        <button
-          class="fixed inset-0 -z-10"
-          (click)="toggleSidebar()"
-          aria-label="Sidebar Overlay"
+        <header data-sidebar="header" class="flex flex-col gap-2 p-2">HEADER</header>
+        <nav
+          data-sidebar="content"
+          class="flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden"
         >
-          <div class="size-full bg-black/20"></div>
-        </button>
-      }
+          NAV
+        </nav>
+        <button
+          data-sidebar="rail"
+          aria-label="Toggle Sidebar"
+          tabindex="-1"
+          title="Toggle Sidebar"
+          class="hover:after:bg-sidebar-border group-data-[collapsible=offcanvas]:hover:bg-sidebar absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[collapsible=offcanvas]:translate-x-0 group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[collapsible=offcanvas]:after:left-full sm:flex [[data-side=left]_&]:cursor-w-resize [[data-side=left][data-collapsible=offcanvas]_&]:-right-2 [[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right]_&]:cursor-e-resize [[data-side=right][data-collapsible=offcanvas]_&]:-left-2 [[data-side=right][data-state=collapsed]_&]:cursor-w-resize"
+          (click)="toggleSidebar()"
+        ></button>
+      </div>
     </div>
   `,
-  styles: `
-    :root {
-      --sidebar-width: 250px;
-      --sidebar-collapsed-width: 60px;
-      --sidebar-transition: width 0.3s ease-out;
-    }
-
-    #sidebar {
-      transition: var(--sidebar-transition);
-    }
-
-    :is(.overlay, .sidebar-area, .static-inactive) {
-      margin: 0;
-      border-radius: 0;
-    }
-
-    :is(.static-active, .overlay.overlay-active, .mobile.mobile-active) {
-      width: var(--sidebar-width) !important;
-    }
-
-    :is(.static-inactive, .overlay.overlay-inactive, .mobile.mobile-inactive) {
-      width: 0 !important;
-    }
-
-    .static-collapsed {
-      width: var(--sidebar-collapsed-width);
-    }
-
-    .overlay,
-    .mobile {
-      width: 0 !important;
-      position: fixed;
-      inset-block: 0;
-      left: 0;
-
-      transition: var(--sidebar-transition);
-    }
-  `,
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'isolate relative block',
+    class: 'group peer text-foreground hidden md:block',
+    '[attr.data-variant]': 'dataVariant()',
+    '[attr.data-side]': 'dataSide()',
+    '[attr.data-state]': 'dataState()',
+    '[attr.data-collapsible]': 'dataCollapsible()',
   },
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   private sidebarService = inject(SidebarService);
 
-  ngOnInit(): void {
-    console.log('Sidebar initialized');
-  }
+  // TODO: INCLUIR LOGICA PARA CONTROLAR ESTO DINAMICAMENTE
+  dataVariant = computed(() => {
+    return 'sidebar';
+  });
 
-  get isSidebarClosed() {
-    return this.sidebarService.isSidebarClosed;
-  }
+  // TODO: INCLUIR LOGICA PARA CONTROLAR ESTO DINAMICAMENTE
+  dataSide = computed(() => {
+    return 'left';
+  });
 
-  get isOverlayActive() {
-    return this.sidebarService.isOverlayActive;
-  }
+  dataState = computed(() => {
+    const isExpanded = this.sidebarService.currentSidebarState().isDesktopActive;
 
-  get isCollapsed() {
-    return this.sidebarService.isCollapsed;
-  }
+    return isExpanded ? 'expanded' : 'collapsed';
+  });
 
-  public sidebarClass = computed(() => {
-    const {
-      isDesktopActive,
-      isDesktopInactive,
-      isDesktopCollapsed,
-      isMobile,
-      isMobileActive,
-      isMobileInactive,
-      isOverlay,
-      isOverlayActive,
-      isOverlayInactive,
-    } = this.sidebarService.currentSidebarState();
+  dataCollapsible = computed(() => {
+    const { isDesktopCollapsed, isDesktopInactive } =
+      this.sidebarService.currentSidebarState();
 
-    return {
-      'static-active': isDesktopActive,
-      'static-inactive': isDesktopInactive,
-      'static-collapsed': isDesktopCollapsed,
-      mobile: isMobile,
-      'mobile-active': isMobileActive,
-      'mobile-inactive': isMobileInactive,
-      overlay: isOverlay,
-      'overlay-active': isOverlayActive,
-      'overlay-inactive': isOverlayInactive,
-    };
+    if (isDesktopCollapsed) return 'icon';
+
+    if (isDesktopInactive) return 'offcanvas';
+
+    return '';
   });
 
   toggleSidebar() {
