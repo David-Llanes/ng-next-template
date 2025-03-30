@@ -13,6 +13,11 @@ export const routes: Routes = [
     component: AppLayoutComponent,
     children: [
       {
+        path: '',
+        loadComponent: () =>
+          import('@features/home.component').then(m => m.HomeComponent),
+      },
+      {
         path: 'settings',
         component: SettingsLayoutComponent,
         loadChildren: () => import('@features/settings/settings.routes'),

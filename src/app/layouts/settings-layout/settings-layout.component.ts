@@ -5,13 +5,17 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-settings-layout',
   imports: [RouterOutlet],
   template: `
-    <div class="h-20 shrink-0 bg-black text-white">THIS CAN BE STICKY</div>
-    <div class="grow">
+    <div
+      class="bg-background sticky top-0 h-20 shrink-0 place-content-center text-center"
+    >
+      THIS CAN BE STICKY
+    </div>
+    <div class="flex grow flex-col">
       <router-outlet />
     </div>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'flex flex-col' },
+  host: { class: 'flex flex-col grow' },
 })
 export class SettingsLayoutComponent {}
