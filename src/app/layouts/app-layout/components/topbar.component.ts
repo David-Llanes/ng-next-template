@@ -52,7 +52,7 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
         >
           RESET
         </button>
-        <button
+        <!-- <button
           class="cursor-pointer rounded-lg bg-green-600 p-1 text-white"
           (click)="this.layoutService.setLayoutMode('col')"
         >
@@ -63,7 +63,7 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
           (click)="this.layoutService.setLayoutMode('row')"
         >
           ROW
-        </button>
+        </button> -->
         <button
           class="cursor-pointer rounded-lg bg-slate-700 p-1 text-white"
           (click)="this.layoutService.setDarkTheme()"

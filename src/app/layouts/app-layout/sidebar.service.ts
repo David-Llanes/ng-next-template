@@ -11,14 +11,17 @@ import {
 
 import { MediaQueryService } from '@core/services';
 
+export type Variant = 'sidebar' | 'inset' | 'floating';
+export type Side = 'left' | 'right';
+export type Mode = 'static' | 'overlay';
+
 interface SidebarState {
   staticDesktopActive?: boolean;
-  mobileActive?: boolean;
   overlayActive?: boolean;
 }
 
 interface SidebarConfig {
-  mode?: 'static' | 'overlay';
+  mode?: Mode;
   canCollapse?: boolean;
   rail?: boolean;
   initialStaticDesktopActive?: boolean;
@@ -40,7 +43,6 @@ export class SidebarService {
 
   readonly #state: SidebarState = {
     staticDesktopActive: this.loadConfig().initialStaticDesktopActive,
-    mobileActive: false,
     overlayActive: false,
   };
 
@@ -48,53 +50,47 @@ export class SidebarService {
   public sidebarConfig = signal<SidebarConfig>(this.loadConfig());
 
   public isDesktop = computed(() => this.mediaQueryService.isDesktop());
-  public isOverlay = computed(() => this.sidebarConfig().mode === 'overlay');
-  public isStatic = computed(() => this.sidebarConfig().mode === 'static');
+  public isOverlay = computed(
+    () => this.sidebarConfig().mode === 'overlay' || !this.isDesktop()
+  );
+  public isStatic = computed(
+    () => this.sidebarConfig().mode === 'static' && this.isDesktop()
+  );
 
-  public currentSidebarState = computed(() => {
-    const { canCollapse } = this.sidebarConfig();
-    const { staticDesktopActive, mobileActive, overlayActive } = this.sidebarState();
-    const isDesktop = this.isDesktop();
+  // STATE WHEN IS DESKTOP (STATIC)
+  public isStaticActive = computed(
+    () => this.isStatic() && this.sidebarState().staticDesktopActive
+  );
+  public isStaticOffCanvas = computed(
+    () =>
+      this.isStatic() &&
+      !this.sidebarState().staticDesktopActive &&
+      !this.sidebarConfig().canCollapse
+  );
+  public isStaticCollapsed = computed(
+    () =>
+      this.isStatic() &&
+      !this.sidebarState().staticDesktopActive &&
+      this.sidebarConfig().canCollapse
+  );
 
-    return untracked(() => {
-      const isStaticMode = this.isStatic();
-      const isOverlayMode = this.isOverlay();
-
-      const staticInactive =
-        !canCollapse && !staticDesktopActive && isStaticMode && isDesktop;
-      const isMobile = isStaticMode && !isDesktop;
-
-      return {
-        isDesktopActive: isStaticMode && isDesktop && staticDesktopActive,
-        isDesktopInactive: staticInactive,
-        isDesktopCollapsed:
-          canCollapse && !staticDesktopActive && isStaticMode && isDesktop,
-        isMobile,
-        isMobileActive: mobileActive && isMobile,
-        isMobileInactive: !mobileActive && isMobile,
-        isOverlay: isOverlayMode,
-        isOverlayActive: isOverlayMode && overlayActive,
-        isOverlayInactive: isOverlayMode && !overlayActive,
-      };
-    });
-  });
-
-  public isCollapsed = computed(() => this.currentSidebarState().isDesktopCollapsed);
-
-  public isSidebarClosed = computed(() => {
-    const { isDesktopActive, isDesktopCollapsed, isMobileActive, isOverlayActive } =
-      this.currentSidebarState();
-
-    return !isDesktopActive && !isDesktopCollapsed && !isMobileActive && !isOverlayActive;
-  });
-
-  public isOverlayActive = computed<boolean>(() => {
-    const { isMobileActive, isOverlayActive } = this.currentSidebarState();
-
-    return isMobileActive! || isOverlayActive!;
-  });
+  // STATE WHEN ITS OVERLAY OR MOBILE
+  public isOverlayActive = computed(
+    () => this.isOverlay() && this.sidebarState().overlayActive
+  );
+  public isOverlayOffCanvas = computed(
+    () => this.isOverlay() && !this.sidebarState().overlayActive
+  );
 
   constructor() {
+    effect(() => {
+      console.log('CONFIG', this.sidebarConfig());
+    });
+
+    effect(() => {
+      console.log('STATE', this.sidebarState());
+    });
+
     // Guardar en el localStorage la configuracion SOLO en el navegador
     effect(() => {
       const config = this.sidebarConfig();
@@ -122,25 +118,14 @@ export class SidebarService {
     }
 
     if (this.isStatic()) {
-      if (this.isDesktop()) {
-        // Si esta en modo static y es desktop
-        this.sidebarState.update(
-          prev =>
-            ({
-              ...prev,
-              staticDesktopActive: !this.sidebarState().staticDesktopActive,
-            }) satisfies SidebarState
-        );
-      } else {
-        // Si esta en modo static y es mobile
-        this.sidebarState.update(
-          prev =>
-            ({
-              ...prev,
-              mobileActive: !this.sidebarState().mobileActive,
-            }) satisfies SidebarState
-        );
-      }
+      // Si esta en modo static y es desktop
+      this.sidebarState.update(
+        prev =>
+          ({
+            ...prev,
+            staticDesktopActive: !this.sidebarState().staticDesktopActive,
+          }) satisfies SidebarState
+      );
     }
   }
 
@@ -162,6 +147,11 @@ export class SidebarService {
     this.sidebarConfig.update(
       prev => ({ ...prev, canCollapse: value, mode: 'static' }) satisfies SidebarConfig
     );
+
+    if (this.sidebarState().staticDesktopActive) {
+      console.log('LA CERRE PARA QUE SE VEA COLAPSADA XD');
+      this.sidebarState.update(prev => ({ ...prev, staticDesktopActive: false }));
+    }
   }
 
   public setInitialStaticDesktopActive(value: boolean) {
@@ -180,7 +170,6 @@ export class SidebarService {
     this.sidebarConfig.set(this.#defaultConfig);
     this.sidebarState.set({
       staticDesktopActive: this.#defaultConfig.initialStaticDesktopActive,
-      mobileActive: false,
       overlayActive: false,
     });
 

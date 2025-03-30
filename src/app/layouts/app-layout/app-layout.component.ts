@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   inject,
+  signal,
   TemplateRef,
   viewChild,
 } from '@angular/core';
@@ -23,7 +24,7 @@ import { TopbarComponent } from './components/topbar.component';
     </ng-template>
 
     <ng-template #sidebar>
-      <app-sidebar [attr.data-mode]="layoutMode()" />
+      <app-sidebar [attr.data-layout]="layoutMode()" />
     </ng-template>
 
     <ng-template #main>
@@ -36,14 +37,14 @@ import { TopbarComponent } from './components/topbar.component';
       <!-- XD -->
       <div
         style="--sidebar-width:16rem; --sidebar-width-icon:3rem; --topbar-height:4rem;"
-        class="group flex h-svh w-full overflow-hidden"
+        class="group/sidebar-wrapper has-[[data-variant=inset]]:bg-sidebar flex h-svh w-full overflow-hidden"
         [ngClass]="{ 'flex-col': layoutMode() === 'col' }"
       >
         <ng-container [ngTemplateOutlet]="outerComponent()!" />
 
         <div
-          class="flex flex-1 overflow-hidden"
-          [ngClass]="{ 'flex-col': layoutMode() === 'row' }"
+          class="bg-background relative flex w-full flex-1 overflow-hidden md:peer-data-[variant=inset]:ml-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:m-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:rounded-xl md:peer-data-[layout=row]:peer-data-[variant=inset]:shadow-sm"
+          [ngClass]="{ 'flex-col': layoutMode() !== 'col' }"
         >
           <ng-container [ngTemplateOutlet]="innerComponent()!" />
           <ng-container [ngTemplateOutlet]="content()" />
@@ -57,7 +58,7 @@ import { TopbarComponent } from './components/topbar.component';
 export class AppLayoutComponent {
   layoutService = inject(AppLayoutService);
 
-  layoutMode = this.layoutService.layoutMode;
+  layoutMode = signal('row');
 
   sidebar = viewChild.required<TemplateRef<unknown>>('sidebar');
   topbar = viewChild.required<TemplateRef<unknown>>('topbar');
