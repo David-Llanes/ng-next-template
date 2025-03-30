@@ -3,7 +3,6 @@ import {
   Component,
   computed,
   inject,
-  signal,
   TemplateRef,
   viewChild,
 } from '@angular/core';
@@ -14,7 +13,6 @@ import { AppLayoutService } from './app-layout.service';
 import { SidebarComponent } from './components/sidebar.component';
 import { TopbarComponent } from './components/topbar.component';
 
-// TODO: SEGUIR MEJORANDO LOS SERVICIOS Y METERLE LAS CLASES AL ASIDE, NO AL app-sidebar
 @Component({
   selector: 'app-app-layout',
   imports: [RouterOutlet, SidebarComponent, TopbarComponent, NgTemplateOutlet, NgClass],
@@ -43,7 +41,7 @@ import { TopbarComponent } from './components/topbar.component';
         <ng-container [ngTemplateOutlet]="outerComponent()!" />
 
         <div
-          class="bg-background relative flex w-full flex-1 overflow-hidden md:peer-data-[variant=inset]:ml-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:m-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:rounded-xl md:peer-data-[layout=row]:peer-data-[variant=inset]:shadow-sm"
+          class="bg-background relative flex w-full flex-1 overflow-hidden transition-[margin,padding] duration-200 md:peer-data-[variant=inset]:ml-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:m-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:rounded-xl md:peer-data-[layout=row]:peer-data-[variant=inset]:shadow-sm"
           [ngClass]="{ 'flex-col': layoutMode() !== 'col' }"
         >
           <ng-container [ngTemplateOutlet]="innerComponent()!" />
@@ -58,7 +56,7 @@ import { TopbarComponent } from './components/topbar.component';
 export class AppLayoutComponent {
   layoutService = inject(AppLayoutService);
 
-  layoutMode = signal('row');
+  layoutMode = this.layoutService.layoutMode;
 
   sidebar = viewChild.required<TemplateRef<unknown>>('sidebar');
   topbar = viewChild.required<TemplateRef<unknown>>('topbar');

@@ -9,11 +9,14 @@ import {
   untracked,
 } from '@angular/core';
 
+export type LayoutMode = 'col' | 'row';
+
 export interface LayoutConfig {
   preset?: string;
   primary?: string;
   surface?: string | undefined | null;
   darkTheme?: boolean;
+  layoutMode?: LayoutMode;
 }
 
 @Injectable({
@@ -27,6 +30,7 @@ export class AppLayoutService {
     primary: 'emerald',
     surface: null,
     darkTheme: false,
+    layoutMode: 'row',
   };
 
   private initialized = false;
@@ -37,6 +41,7 @@ export class AppLayoutService {
   public getPrimary = computed(() => this.layoutConfig().primary);
   public getSurface = computed(() => this.layoutConfig().surface);
   public isDarkTheme = computed(() => this.layoutConfig().darkTheme);
+  public layoutMode = computed(() => this.layoutConfig().layoutMode);
 
   constructor() {
     effect(() => {
@@ -78,6 +83,12 @@ export class AppLayoutService {
   public setLightTheme() {
     this.layoutConfig.update(
       prev => ({ ...prev, darkTheme: false }) satisfies LayoutConfig
+    );
+  }
+
+  public setLayoutMode(mode: LayoutMode) {
+    this.layoutConfig.update(
+      prev => ({ ...prev, layoutMode: mode }) satisfies LayoutConfig
     );
   }
 
