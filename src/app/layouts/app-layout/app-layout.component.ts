@@ -1,3 +1,4 @@
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +9,6 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { AppLayoutService } from './app-layout.service';
 import { SidebarComponent } from './components/sidebar.component';
 import { TopbarComponent } from './components/topbar.component';
