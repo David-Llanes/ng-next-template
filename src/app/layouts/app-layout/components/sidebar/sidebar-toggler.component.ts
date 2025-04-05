@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { SidebarService } from '@layouts/app-layout/sidebar.service';
+import { SidebarService } from '@core/services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar-toggler',

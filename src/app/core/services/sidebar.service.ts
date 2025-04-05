@@ -9,11 +9,10 @@ import {
   untracked,
 } from '@angular/core';
 
-import { MediaQueryService } from '@core/services';
+import { MediaQueryService } from '@core/services/media-query.service';
 
 export type DataState = 'collapsed' | 'expanded';
 export type DataCollapsible = 'icon' | 'offcanvas' | '';
-
 export type Variant = 'sidebar' | 'inset' | 'floating';
 export type Side = 'left' | 'right';
 export type Mode = 'static' | 'overlay';

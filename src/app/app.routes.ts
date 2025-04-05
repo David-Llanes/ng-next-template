@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { NotFoundComponent, UnauthorizedComponent } from '@shared/pages';
-import {
-  AppLayoutComponent,
-  AuthLayoutComponent,
-  SettingsLayoutComponent,
-} from './layouts';
+import { AppLayoutComponent } from '@layouts/app-layout/app-layout.component';
+import { AuthLayoutComponent } from '@layouts/auth-layout/auth-layout.component';
+import { SettingsLayoutComponent } from '@layouts/settings-layout/settings-layout.component';
+import { NotFoundComponent } from '@shared/pages/not-found.component';
+import { UnauthorizedComponent } from '@shared/pages/unauthorized.component';
 
 export const routes: Routes = [
   {

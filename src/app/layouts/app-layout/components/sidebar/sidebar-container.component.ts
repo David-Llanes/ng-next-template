@@ -6,14 +6,14 @@ import {
   input,
 } from '@angular/core';
 
-import { LayoutMode } from '@layouts/app-layout/app-layout.service';
+import { LayoutMode } from '@core/services/layout.service';
 import {
   DataCollapsible,
   DataState,
   Mode,
   SidebarService,
   Variant,
-} from '@layouts/app-layout/sidebar.service';
+} from '@core/services/sidebar.service';
 import { SidebarContentComponent } from './sidebar-content.component';
 import { SidebarFooterComponent } from './sidebar-footer.component';
 import { SidebarHeaderComponent } from './sidebar-header.component';

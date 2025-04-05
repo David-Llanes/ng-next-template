@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AppLayoutService, SidebarService } from '@layouts/index';
+
+import { LayoutService } from '@core/services/layout.service';
+import { SidebarService } from '@core/services/sidebar.service';
 
 @Component({
   selector: 'app-home',
@@ -156,6 +158,6 @@ import { AppLayoutService, SidebarService } from '@layouts/index';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  layoutService = inject(AppLayoutService);
+  layoutService = inject(LayoutService);
   sidebarService = inject(SidebarService);
 }

@@ -22,7 +22,7 @@ export interface LayoutConfig {
 @Injectable({
   providedIn: 'root',
 })
-export class AppLayoutService {
+export class LayoutService {
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly #defaultConfig: LayoutConfig = {

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { AppLayoutService } from './app-layout.service';
+import { LayoutService } from '@core/services/layout.service';
 import { SidebarContainerComponent } from './components/sidebar/sidebar-container.component';
 import { TopbarComponent } from './components/topbar.component';
 
@@ -59,7 +59,7 @@ import { TopbarComponent } from './components/topbar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppLayoutComponent {
-  private layoutService = inject(AppLayoutService);
+  private layoutService = inject(LayoutService);
 
   layoutMode = this.layoutService.layoutMode;
 
