@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SidebarTogglerComponent } from './sidebar-toggler.component';
+import { SidebarTogglerComponent } from './sidebar/sidebar-toggler.component';
 
 @Component({
   selector: 'app-topbar',
@@ -14,8 +14,7 @@ import { SidebarTogglerComponent } from './sidebar-toggler.component';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class:
-      'bg-background flex h-[var(--topbar-height)] w-full shrink-0 items-center border-b',
+    class: 'bg-background flex h-[var(--topbar-height)] w-full shrink-0 items-center',
   },
 })
 export class TopbarComponent {}

@@ -10,19 +10,25 @@ import {
 import { RouterOutlet } from '@angular/router';
 
 import { AppLayoutService } from './app-layout.service';
-import { SidebarComponent } from './components/sidebar.component';
+import { SidebarContainerComponent } from './components/sidebar/sidebar-container.component';
 import { TopbarComponent } from './components/topbar.component';
 
 @Component({
   selector: 'app-app-layout',
-  imports: [RouterOutlet, SidebarComponent, TopbarComponent, NgTemplateOutlet, NgClass],
+  imports: [
+    RouterOutlet,
+    TopbarComponent,
+    NgTemplateOutlet,
+    NgClass,
+    SidebarContainerComponent,
+  ],
   template: `
     <ng-template #topbar>
-      <app-topbar />
+      <app-topbar [class]="layoutMode() === 'col' ? 'border-b' : ''" />
     </ng-template>
 
     <ng-template #sidebar>
-      <app-sidebar [attr.data-layout]="layoutMode()" />
+      <app-sidebar-container [layoutMode]="layoutMode()" />
     </ng-template>
 
     <ng-template #main>
@@ -32,7 +38,6 @@ import { TopbarComponent } from './components/topbar.component';
     </ng-template>
 
     @defer (when layoutReady()) {
-      <!-- XD -->
       <div
         style="--sidebar-width:16rem; --sidebar-width-icon:3rem; --topbar-height:4rem;"
         class="group/sidebar-wrapper has-[[data-variant=inset]]:bg-sidebar flex h-svh w-full overflow-hidden"
@@ -54,7 +59,7 @@ import { TopbarComponent } from './components/topbar.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppLayoutComponent {
-  layoutService = inject(AppLayoutService);
+  private layoutService = inject(AppLayoutService);
 
   layoutMode = this.layoutService.layoutMode;
 
