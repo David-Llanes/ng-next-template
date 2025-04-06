@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-general',
@@ -14,8 +14,4 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'page grow' },
 })
-export class GeneralComponent implements OnInit {
-  ngOnInit(): void {
-    console.log('GeneralComponent initialized');
-  }
-}
+export class GeneralComponent {}

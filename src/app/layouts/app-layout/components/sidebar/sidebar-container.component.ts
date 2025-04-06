@@ -1,12 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
-import { LayoutMode } from '@core/services/layout.service';
+import { LayoutService } from '@core/services/layout.service';
 import {
   DataCollapsible,
   DataState,
@@ -30,18 +24,18 @@ import { SidebarComponent } from './sidebar.component';
   template: `
     <app-sidebar>
       <app-sidebar-header>
-        <header class="flex bg-green-200 p-2">HEADER</header>
+        <header class="flex flex-col gap-2 p-2">HEADER</header>
       </app-sidebar-header>
 
-      <app-sidebar-content class="grow">
-        <nav
-          class="flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden"
-        >
-          <button class="m-2 cursor-pointer border bg-yellow-500 p-4 shadow-md">
-            Hola
-          </button>
-          <a href="https://www.google.com" target="_blank">Google</a>
-        </nav>
+      <app-sidebar-content>
+        @for (item of [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; track $index) {
+          <nav class="flex flex-col gap-1 bg-green-200">
+            <button class="m-2 cursor-pointer border bg-yellow-500 p-4 shadow-md">
+              Hola
+            </button>
+            <a href="https://www.google.com" target="_blank">Google</a>
+          </nav>
+        }
       </app-sidebar-content>
 
       <app-sidebar-footer>
@@ -58,13 +52,14 @@ import { SidebarComponent } from './sidebar.component';
     '[attr.data-mode]': 'dataMode()',
     '[attr.data-state]': 'dataState()',
     '[attr.data-collapsible]': 'dataCollapsible()',
-    '[attr.data-layout]': 'layoutMode()',
+    '[attr.data-layout]': 'dataLayout()',
   },
 })
 export class SidebarContainerComponent {
   private sidebarService = inject(SidebarService);
+  private layoutService = inject(LayoutService);
 
-  layoutMode = input.required<LayoutMode | undefined>();
+  dataLayout = this.layoutService.layoutMode;
 
   dataVariant = computed<Variant | ''>(() => {
     return this.sidebarService.variant() ?? '';

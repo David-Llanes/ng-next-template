@@ -30,6 +30,5 @@ export class SidebarTogglerComponent {
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
-    console.log(this.sidebarService.sidebarState());
   }
 }
