@@ -14,7 +14,7 @@ import { SidebarService } from '@core/services/sidebar.service';
     >
       <aside
         data-sidebar="sidebar"
-        class="bg-sidebar flex h-full w-full flex-col group-data-[layout=row]:group-data-[state=expanded]:group-data-[variant=floating]:shadow group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=floating]:rounded-lg group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=floating]:outline group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=inset]:rounded-lg"
+        class="bg-sidebar flex size-full flex-col group-data-[layout=row]:group-data-[state=expanded]:group-data-[variant=floating]:shadow group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=floating]:rounded-lg group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=floating]:outline group-data-[layout=row]:group-data-[mode=static]:group-data-[state=expanded]:group-data-[variant=inset]:rounded-lg"
       >
         <!-- SIDEBAR (header, content y footer) -->
         <ng-content />
@@ -44,11 +44,17 @@ import { SidebarService } from '@core/services/sidebar.service';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    style: '--sidebar-padding-collapsed: 0.25rem; --sidebar-padding-expanded: 0.5rem;',
+    '[style.--sidebar-padding]':
+      'isCollapsed() ? "var(--sidebar-padding-collapsed)" : "var(--sidebar-padding-expanded)"',
+    '[style.--icon-size]': 'isCollapsed()? "1.25rem" : "1.25rem"',
     '(document:keydown.escape)': 'onEscapeKey()',
   },
 })
 export class SidebarComponent {
   private sidebarService = inject(SidebarService);
+
+  isCollapsed = this.sidebarService.isStaticCollapsed;
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();

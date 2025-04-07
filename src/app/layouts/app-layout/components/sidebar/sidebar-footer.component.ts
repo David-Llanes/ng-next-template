@@ -7,6 +7,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    class:
+      'flex flex-col gap-2 p-[var(--sidebar-padding)] transition-[padding] duration-200',
     '[attr.data-sidebar]': '"footer"',
   },
 })
