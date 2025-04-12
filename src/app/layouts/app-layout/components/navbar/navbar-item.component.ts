@@ -11,12 +11,13 @@ import { RouterLink } from '@angular/router';
 
 import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
+import { NavbarLinkComponent } from './navbar-link.component';
 
 // TODO: ICONS SHOULD BE OPTIONAL
 // TODO: SEPARATE IN COMPONENTS
 @Component({
   selector: 'app-navbar-item',
-  imports: [RouterLink, NgClass],
+  imports: [RouterLink, NgClass, NavbarLinkComponent],
   template: `
     @let localItem = item();
 
@@ -24,37 +25,11 @@ import { SidebarService } from '@core/services/sidebar.service';
       <!-- LINK (leaf) -->
       @if (localItem.isLink) {
         <a
+          app-navbar-link
+          [item]="localItem"
           [routerLink]="localItem.routerLink"
-          class="hover:bg-muted mb-1 grid h-[var(--sidebar-item-size)] w-full grid-cols-[var(--sidebar-item-size)_auto] items-center overflow-hidden rounded-md"
+          class="mb-1 overflow-hidden rounded-md"
         >
-          <div class="grid size-[var(--sidebar-item-size)] place-content-center p-1.5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="size-full max-h-6 max-w-6"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M15 8h.01" />
-              <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
-              <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
-              <path
-                d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9"
-              />
-            </svg>
-          </div>
-          <p
-            [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
-            class="truncate pr-2 text-nowrap transition-[opacity] duration-200"
-          >
-            {{ localItem.key }}
-          </p>
         </a>
       }
 
