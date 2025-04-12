@@ -44,17 +44,11 @@ import { SidebarService } from '@core/services/sidebar.service';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: '--sidebar-padding-collapsed: 0.25rem; --sidebar-padding-expanded: 0.5rem;',
-    '[style.--sidebar-padding]':
-      'isCollapsed() ? "var(--sidebar-padding-collapsed)" : "var(--sidebar-padding-expanded)"',
-    '[style.--icon-size]': 'isCollapsed()? "1.25rem" : "1.25rem"',
     '(document:keydown.escape)': 'onEscapeKey()',
   },
 })
 export class SidebarComponent {
   private sidebarService = inject(SidebarService);
-
-  isCollapsed = this.sidebarService.isStaticCollapsed;
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();

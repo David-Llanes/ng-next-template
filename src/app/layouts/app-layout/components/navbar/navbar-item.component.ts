@@ -22,72 +22,89 @@ import { SidebarService } from '@core/services/sidebar.service';
       @if (localItem.isLink) {
         <a
           [routerLink]="localItem.routerLink"
-          class="hover:bg-muted mb-1 flex items-center gap-1 overflow-hidden rounded-lg p-2"
+          class="hover:bg-muted mb-1 grid h-[var(--sidebar-item-height)] w-full grid-cols-[var(--sidebar-item-height)_auto] items-center overflow-hidden rounded-lg"
         >
-          <!-- <i [class]="localItem.icon + ' w-5 shrink-0'"></i> -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-5 shrink-0"
+          <div class="grid size-[var(--sidebar-item-height)] place-content-center p-1.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="size-full max-h-6 max-w-6"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M15 8h.01" />
+              <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
+              <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
+              <path
+                d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9"
+              />
+            </svg>
+          </div>
+          <p
+            [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
+            class="truncate pr-2 text-nowrap transition-[opacity] duration-200"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M15 8h.01" />
-            <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
-            <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
-            <path d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9" />
-          </svg>
-          <span class="line-clamp-1 grow">{{ localItem.key }}</span>
+            {{ localItem.key }}
+          </p>
         </a>
       }
 
       @if (localItem.items?.length) {
         <div
-          class="grid grid-rows-[auto_0fr] content-start transition-all"
+          class="grid grid-rows-[auto_0fr] content-start transition-[grid-template-rows] duration-200"
           [ngClass]="{
             'grid-rows-[auto_1fr]': isOpen() && !isCollapsed(),
           }"
         >
           <div
-            class="h-[calc(var(--sidebar-width-icon)-var(--sidebar-padding-expanded))] w-full overflow-hidden rounded-lg p-[5px]"
+            class="hover:bg-accent h-[var(--sidebar-item-height)] w-full overflow-hidden rounded-lg"
           >
-            <div
-              class="flex size-full items-center justify-start gap-2 overflow-hidden rounded-lg"
-            >
+            <div class="flex size-full items-center justify-start">
               <!-- <i [class]="localItem.icon + ' w-5 shrink-0'"></i> -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="size-[calc(var(--sidebar-width-icon)-var(--icon-size))] shrink-0"
+              <div
+                class="grid size-[var(--sidebar-item-height)] shrink-0 place-content-center p-1.5"
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M15 8h.01" />
-                <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
-                <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
-                <path
-                  d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9"
-                />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-full max-h-6 max-w-6"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M15 8h.01" />
+                  <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
+                  <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
+                  <path
+                    d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9"
+                  />
+                </svg>
+              </div>
 
-              <div class="flex flex-1 items-center overflow-hidden">
-                <span class="line-clamp-1 flex-1">{{ localItem.key }}</span>
+              <div
+                class="grid h-full flex-1 grid-cols-[1fr_var(--sidebar-item-height)] items-center"
+              >
+                <p
+                  [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
+                  class="truncate text-nowrap transition-[opacity] duration-200"
+                >
+                  {{ localItem.key }}
+                </p>
 
                 <button
-                  class="flex size-5 cursor-pointer items-center justify-center overflow-hidden"
-                  [ngClass]="{ 'rotate-90': isOpen() }"
+                  class="grid size-[var(--sidebar-item-height)] cursor-pointer place-content-center p-1.5"
+                  [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
                   (click)="isOpen.set(!isOpen())"
                 >
                   <svg
@@ -100,6 +117,7 @@ import { SidebarService } from '@core/services/sidebar.service';
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
+                    class="bg-red- size-full max-h-5 max-w-5"
                   >
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M9 6l6 6l-6 6" />
