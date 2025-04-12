@@ -7,7 +7,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
@@ -17,7 +17,7 @@ import { NavbarLinkComponent } from './navbar-link.component';
 // TODO: SEPARATE IN COMPONENTS
 @Component({
   selector: 'app-navbar-item',
-  imports: [RouterLink, NgClass, NavbarLinkComponent],
+  imports: [RouterLink, RouterLinkActive, NgClass, NavbarLinkComponent],
   template: `
     @let localItem = item();
 
@@ -28,7 +28,8 @@ import { NavbarLinkComponent } from './navbar-link.component';
           app-navbar-link
           [item]="localItem"
           [routerLink]="localItem.routerLink"
-          class="mb-1 overflow-hidden rounded-md"
+          routerLinkActive="text-primary hover:bg-transparent"
+          class="hover:bg-muted mb-1 overflow-hidden rounded-md"
         >
         </a>
       }
@@ -36,7 +37,7 @@ import { NavbarLinkComponent } from './navbar-link.component';
       <!-- COLLAPSIBLE -->
       @if (localItem.items?.length) {
         <div
-          class="grid grid-rows-[auto_0fr] content-start text-sm transition-[grid-template-rows] duration-200"
+          class="group/item grid grid-rows-[auto_0fr] content-start text-sm transition-[grid-template-rows] duration-200"
           [ngClass]="{
             'grid-rows-[auto_1fr]': isOpen() && !isCollapsed(),
           }"
@@ -45,7 +46,9 @@ import { NavbarLinkComponent } from './navbar-link.component';
           <div
             class="hover:bg-accent h-[var(--sidebar-item-size)] w-full overflow-hidden rounded-md"
           >
-            <div class="flex size-full items-center justify-start">
+            <div
+              class="group-has-[&_a.text-primary]/item:text-primary flex size-full items-center justify-start group-has-[&_a.text-primary]/item:font-semibold"
+            >
               <!-- ICON -->
               <div
                 class="grid size-[var(--sidebar-item-size)] shrink-0 place-content-center p-1.5"
@@ -109,9 +112,9 @@ import { NavbarLinkComponent } from './navbar-link.component';
           </div>
 
           <!-- SUB-MENU -->
-          <ul class="mt-1 grid overflow-hidden pl-3">
+          <ul class="mt-1 ml-1 grid overflow-hidden border-l border-dashed pl-2">
             @for (subItem of localItem.items; track subItem.key) {
-              <app-navbar-item [item]="subItem"></app-navbar-item>
+              <app-navbar-item class="" [item]="subItem"></app-navbar-item>
             }
           </ul>
         </div>

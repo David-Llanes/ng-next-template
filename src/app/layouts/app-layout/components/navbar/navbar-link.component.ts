@@ -37,7 +37,7 @@ import { MenuItem } from '@core/config/nav-bar-items';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'hover:bg-muted  grid h-[var(--sidebar-item-size)] w-full grid-cols-[var(--sidebar-item-size)_auto] items-center',
+      'grid h-[var(--sidebar-item-size)] w-full grid-cols-[var(--sidebar-item-size)_auto] items-center',
   },
 })
 export class NavbarLinkComponent {
