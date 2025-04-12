@@ -60,3 +60,45 @@ export class SidebarComponent {
     }
   }
 }
+
+@Component({
+  selector: 'app-sidebar-header',
+  imports: [],
+  template: ` <ng-content /> `,
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class:
+      'flex flex-col gap-2 p-[var(--sidebar-padding)] transition-[padding] duration-200',
+    '[attr.data-sidebar]': '"header"',
+  },
+})
+export class SidebarHeaderComponent {}
+
+@Component({
+  selector: 'app-sidebar-content',
+  imports: [],
+  template: ` <ng-content /> `,
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class:
+      'flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden group-data-[collapsible=icon]:overflow-hidden p-[var(--sidebar-padding)] transition-[padding] duration-200',
+    '[attr.data-sidebar]': '"content"',
+  },
+})
+export class SidebarContentComponent {}
+
+@Component({
+  selector: 'app-sidebar-footer',
+  imports: [],
+  template: ` <ng-content /> `,
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class:
+      'flex flex-col gap-2 p-[var(--sidebar-padding)] transition-[padding] duration-200',
+    '[attr.data-sidebar]': '"footer"',
+  },
+})
+export class SidebarFooterComponent {}

@@ -8,7 +8,7 @@ import { NavbarGroupComponent } from './navbar-group.component';
   imports: [NavbarGroupComponent],
   template: `
     @for (group of navigationGroups; track group.sectionKey) {
-      <app-navbar-group [sectionLabel]="group.sectionKey" [items]="group.items" />
+      <app-navbar-group [groupTitle]="group.sectionKey" [items]="group.items" />
     }
   `,
   styles: ``,

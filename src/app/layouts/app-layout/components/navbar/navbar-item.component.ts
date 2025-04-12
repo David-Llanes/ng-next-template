@@ -12,6 +12,8 @@ import { RouterLink } from '@angular/router';
 import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
 
+// TODO: ICONS SHOULD BE OPTIONAL
+// TODO: SEPARATE IN COMPONENTS
 @Component({
   selector: 'app-navbar-item',
   imports: [RouterLink, NgClass],
@@ -19,12 +21,13 @@ import { SidebarService } from '@core/services/sidebar.service';
     @let localItem = item();
 
     <li class="list-none overflow-hidden">
+      <!-- LINK (leaf) -->
       @if (localItem.isLink) {
         <a
           [routerLink]="localItem.routerLink"
-          class="hover:bg-muted mb-1 grid h-[var(--sidebar-item-height)] w-full grid-cols-[var(--sidebar-item-height)_auto] items-center overflow-hidden rounded-lg"
+          class="hover:bg-muted mb-1 grid h-[var(--sidebar-item-size)] w-full grid-cols-[var(--sidebar-item-size)_auto] items-center overflow-hidden rounded-md"
         >
-          <div class="grid size-[var(--sidebar-item-height)] place-content-center p-1.5">
+          <div class="grid size-[var(--sidebar-item-size)] place-content-center p-1.5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -55,20 +58,22 @@ import { SidebarService } from '@core/services/sidebar.service';
         </a>
       }
 
+      <!-- COLLAPSIBLE -->
       @if (localItem.items?.length) {
         <div
-          class="grid grid-rows-[auto_0fr] content-start transition-[grid-template-rows] duration-200"
+          class="grid grid-rows-[auto_0fr] content-start text-sm transition-[grid-template-rows] duration-200"
           [ngClass]="{
             'grid-rows-[auto_1fr]': isOpen() && !isCollapsed(),
           }"
         >
+          <!-- COLLAPSIBLE ITEM -->
           <div
-            class="hover:bg-accent h-[var(--sidebar-item-height)] w-full overflow-hidden rounded-lg"
+            class="hover:bg-accent h-[var(--sidebar-item-size)] w-full overflow-hidden rounded-md"
           >
             <div class="flex size-full items-center justify-start">
-              <!-- <i [class]="localItem.icon + ' w-5 shrink-0'"></i> -->
+              <!-- ICON -->
               <div
-                class="grid size-[var(--sidebar-item-height)] shrink-0 place-content-center p-1.5"
+                class="grid size-[var(--sidebar-item-size)] shrink-0 place-content-center p-1.5"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -92,8 +97,9 @@ import { SidebarService } from '@core/services/sidebar.service';
                 </svg>
               </div>
 
+              <!-- TEXT AND CHEVRON -->
               <div
-                class="grid h-full flex-1 grid-cols-[1fr_var(--sidebar-item-height)] items-center"
+                class="grid h-full flex-1 grid-cols-[1fr_var(--sidebar-item-size)] items-center"
               >
                 <p
                   [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
@@ -103,7 +109,7 @@ import { SidebarService } from '@core/services/sidebar.service';
                 </p>
 
                 <button
-                  class="grid size-[var(--sidebar-item-height)] cursor-pointer place-content-center p-1.5"
+                  class="grid size-[var(--sidebar-item-size)] cursor-pointer place-content-center p-1.5"
                   [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
                   (click)="isOpen.set(!isOpen())"
                 >
@@ -117,7 +123,7 @@ import { SidebarService } from '@core/services/sidebar.service';
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="bg-red- size-full max-h-5 max-w-5"
+                    class="size-full max-h-4 max-w-4"
                   >
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M9 6l6 6l-6 6" />
@@ -127,6 +133,7 @@ import { SidebarService } from '@core/services/sidebar.service';
             </div>
           </div>
 
+          <!-- SUB-MENU -->
           <ul class="mt-1 grid overflow-hidden pl-3">
             @for (subItem of localItem.items; track subItem.key) {
               <app-navbar-item [item]="subItem"></app-navbar-item>

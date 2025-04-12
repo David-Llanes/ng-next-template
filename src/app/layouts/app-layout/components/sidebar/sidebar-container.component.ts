@@ -9,10 +9,13 @@ import {
   Variant,
 } from '@core/services/sidebar.service';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { SidebarContentComponent } from './sidebar-content.component';
-import { SidebarFooterComponent } from './sidebar-footer.component';
-import { SidebarHeaderComponent } from './sidebar-header.component';
-import { SidebarComponent } from './sidebar.component';
+
+import {
+  SidebarComponent,
+  SidebarContentComponent,
+  SidebarFooterComponent,
+  SidebarHeaderComponent,
+} from './sidebar.component';
 
 @Component({
   selector: 'app-sidebar-container',

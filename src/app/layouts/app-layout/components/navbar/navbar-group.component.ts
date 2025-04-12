@@ -16,12 +16,12 @@ import { NavbarItemComponent } from './navbar-item.component';
   imports: [NavbarItemComponent, NgClass],
   template: `
     <span
-      class="text-muted-foreground list-none overflow-hidden text-xs font-bold uppercase transition-all duration-200"
+      class="text-muted-foreground list-none overflow-hidden text-[10px] font-bold uppercase transition-all duration-200"
       [ngClass]="
         isCollapsed() ? 'max-h-0 py-0 opacity-0' : 'mt-4 mb-1 max-h-8 opacity-100'
       "
     >
-      {{ sectionLabel() }}
+      {{ groupTitle() }}
     </span>
 
     <ul class="grid">
@@ -41,6 +41,6 @@ export class NavbarGroupComponent {
 
   isCollapsed = computed(() => this.sidebarService.isStaticCollapsed());
 
-  sectionLabel = input<string>();
+  groupTitle = input<string>();
   items = input<MenuItem[]>([]);
 }
