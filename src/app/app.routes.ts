@@ -27,6 +27,7 @@ export const routes: Routes = [
       { path: 'hemodialysis/patient/laboratories', component: HomeComponent },
       { path: 'hemodialysis/configuration', component: HomeComponent },
       { path: 'hemodialysis/configuration/laboratory', component: HomeComponent },
+      { path: 'catalogs', component: HomeComponent },
       { path: 'catalogs/administration-routes', component: HomeComponent },
       { path: 'catalogs/allergies', component: HomeComponent },
       { path: 'catalogs/bacteria', component: HomeComponent },

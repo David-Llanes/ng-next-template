@@ -13,23 +13,27 @@ import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
 import { NavbarLinkComponent } from './navbar-link.component';
 
-// TODO: ICONS SHOULD BE OPTIONAL
+// TODO: ICONS SHOULD BE OPTIONAL FOR COLLAPSIBLE ITEM
 // TODO: SEPARATE IN COMPONENTS
 @Component({
   selector: 'app-navbar-item',
   imports: [RouterLink, RouterLinkActive, NgClass, NavbarLinkComponent],
   template: `
     @let localItem = item();
+    @let isLink = localItem.isLink && !localItem.items?.length;
+    @let isGroupClickable = localItem.isLink && localItem.items?.length;
 
     <li class="list-none overflow-hidden">
       <!-- LINK (leaf) -->
-      @if (localItem.isLink) {
+      @if (isLink) {
         <a
           app-navbar-link
           [item]="localItem"
+          [showIcon]="false"
           [routerLink]="localItem.routerLink"
           routerLinkActive="text-primary hover:bg-transparent"
-          class="hover:bg-muted mb-1 overflow-hidden rounded-md"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="hover:bg-accent mb-1 overflow-hidden rounded-md"
         >
         </a>
       }
@@ -47,11 +51,61 @@ import { NavbarLinkComponent } from './navbar-link.component';
             class="hover:bg-accent h-[var(--sidebar-item-size)] w-full overflow-hidden rounded-md"
           >
             <div
-              class="group-has-[&_a.text-primary]/item:text-primary flex size-full items-center justify-start group-has-[&_a.text-primary]/item:font-semibold"
+              class="group-has-[&_a.text-primary]/item:text-primary flex size-full items-center group-has-[&_a.text-primary]/item:font-semibold"
             >
-              <!-- ICON -->
-              <div
-                class="grid size-[var(--sidebar-item-size)] shrink-0 place-content-center p-1.5"
+              @if (isGroupClickable) {
+                <a
+                  app-navbar-link
+                  [item]="localItem"
+                  [isCollapsed]="isCollapsed()"
+                  [routerLink]="localItem.routerLink"
+                  routerLinkActive="text-primary hover:bg-transparent"
+                >
+                </a>
+              } @else {
+                <!-- TEMPORAL -->
+                <section
+                  class="grid flex-1 cursor-default grid-cols-[auto_1fr] items-center"
+                >
+                  <!-- ICON -->
+                  <div
+                    class="grid size-[var(--sidebar-item-size)] shrink-0 place-content-center p-1.5"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="size-full max-h-6 max-w-6"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M9 6l11 0" />
+                      <path d="M9 12l11 0" />
+                      <path d="M9 18l11 0" />
+                      <path d="M5 6l0 .01" />
+                      <path d="M5 12l0 .01" />
+                      <path d="M5 18l0 .01" />
+                    </svg>
+                  </div>
+                  <p
+                    [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
+                    class="truncate text-nowrap transition-[opacity] duration-200"
+                  >
+                    {{ localItem.key }}
+                  </p>
+                </section>
+              }
+
+              <!-- CHEVRON -->
+              <button
+                class="grid size-[var(--sidebar-item-size)] cursor-pointer place-content-center p-1.5"
+                [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
+                (click)="isOpen.set(!isOpen())"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -63,51 +117,12 @@ import { NavbarLinkComponent } from './navbar-link.component';
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="size-full max-h-6 max-w-6"
+                  class="size-full max-h-4 max-w-4"
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M15 8h.01" />
-                  <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
-                  <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
-                  <path
-                    d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9"
-                  />
+                  <path d="M9 6l6 6l-6 6" />
                 </svg>
-              </div>
-
-              <!-- TEXT AND CHEVRON -->
-              <div
-                class="grid h-full flex-1 grid-cols-[1fr_var(--sidebar-item-size)] items-center"
-              >
-                <p
-                  [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
-                  class="truncate text-nowrap transition-[opacity] duration-200"
-                >
-                  {{ localItem.key }}
-                </p>
-
-                <button
-                  class="grid size-[var(--sidebar-item-size)] cursor-pointer place-content-center p-1.5"
-                  [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
-                  (click)="isOpen.set(!isOpen())"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="size-full max-h-4 max-w-4"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M9 6l6 6l-6 6" />
-                  </svg>
-                </button>
-              </div>
+              </button>
             </div>
           </div>
 

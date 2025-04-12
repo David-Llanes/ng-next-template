@@ -127,6 +127,8 @@ export const NAVIGATION_GROUPS: NavigationGroup[] = [
     items: [
       {
         url: 'catalogs',
+        routerLink: 'catalogs',
+        isLink: true,
         key: 'Catálogos',
         icon: 'fa-solid fa-folder-open',
         items: [

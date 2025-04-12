@@ -1,46 +1,61 @@
-import { NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, TemplateRef } from '@angular/core';
+
 import { MenuItem } from '@core/config/nav-bar-items';
 
 @Component({
   selector: 'a[app-navbar-link]',
-  imports: [NgClass],
+  imports: [NgClass, NgTemplateOutlet],
   template: `
-    <div class="grid size-[var(--sidebar-item-size)] place-content-center p-1.5">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="size-full max-h-6 max-w-6"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path d="M15 8h.01" />
-        <path d="M4 15l4 -4c.928 -.893 2.072 -.893 3 0l5 5" />
-        <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l2 2" />
-        <path d="M3 12a9 9 0 0 0 9 9a9 9 0 0 0 9 -9a9 9 0 0 0 -9 -9a9 9 0 0 0 -9 9" />
-      </svg>
-    </div>
+    <!-- TODO: QUE RECIBA POR PROPS SI MUESTRA ICONO -->
+    @let withIcon = (item()?.icon || icon()) && showIcon();
+
+    @if (withIcon) {
+      <div class="grid size-[var(--sidebar-item-size)] place-content-center p-1.5">
+        @if (icon()) {
+          <ng-container [ngTemplateOutlet]="icon()!" />
+        } @else {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-full max-h-6 max-w-6"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M9 15l6 -6" />
+            <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
+            <path
+              d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"
+            />
+          </svg>
+        }
+      </div>
+    }
     <p
-      [ngClass]="isCollapsed() ? 'opacity-0' : 'opacity-100'"
+      [ngClass]="{ 'pl-2': !withIcon, 'opacity-0': isCollapsed() }"
       class="truncate pr-2 text-nowrap transition-[opacity] duration-200"
     >
-      {{ item().key }}
+      {{ item()?.key ?? label() ?? '' }}
     </p>
   `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'grid h-[var(--sidebar-item-size)] w-full grid-cols-[var(--sidebar-item-size)_auto] items-center',
+      'h-[var(--sidebar-item-size)] flex-1 grid grid-cols-[auto_1fr] items-center hover:cursor-pointer group/link',
   },
 })
 export class NavbarLinkComponent {
-  item = input.required<MenuItem>();
+  item = input<MenuItem>();
+  showIcon = input<boolean>(true);
   isCollapsed = input<boolean>();
+
+  icon = input<TemplateRef<unknown>>();
+  label = input<string>();
 }
