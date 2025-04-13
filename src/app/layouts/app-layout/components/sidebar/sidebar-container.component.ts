@@ -47,7 +47,7 @@ import {
             [icon]="icon"
             [button]="button"
             [isCollapsed]="isCollapsed()"
-            label="Configuración as sa sa sa asaa ssas asasas"
+            label="Configuración"
             [routerLink]="'settings'"
             routerLinkActive="text-primary hover:bg-transparent font-semibold"
             class="text-sm"

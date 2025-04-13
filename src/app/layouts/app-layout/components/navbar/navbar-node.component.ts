@@ -108,7 +108,7 @@ import { NavbarItemComponent } from './navbar-item.component';
       <button
         class="grid cursor-pointer place-content-center"
         [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
-        (click)="isOpen.set(!isOpen())"
+        (click)="toggleSubMenu($event)"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -139,4 +139,11 @@ export class NavbarNodeComponent {
   item = input.required<MenuItem>();
 
   isOpen = signal<boolean>(false);
+
+  toggleSubMenu(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.isOpen.update(prev => !prev);
+  }
 }
