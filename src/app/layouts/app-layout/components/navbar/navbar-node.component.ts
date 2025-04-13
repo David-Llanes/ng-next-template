@@ -106,7 +106,7 @@ import { NavbarItemComponent } from './navbar-item.component';
 
     <ng-template #chevron>
       <button
-        class="grid size-full cursor-pointer place-content-center"
+        class="grid cursor-pointer place-content-center"
         [ngClass]="{ 'rotate-90': isOpen(), 'opacity-0': isCollapsed() }"
         (click)="isOpen.set(!isOpen())"
       >

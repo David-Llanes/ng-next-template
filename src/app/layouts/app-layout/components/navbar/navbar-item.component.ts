@@ -2,17 +2,19 @@ import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, TemplateRef } from '@angular/core';
 
 import { MenuItem } from '@core/config/nav-bar-items';
+import { NavbarItemSpaceComponent } from './navbar-item-space.component';
 
 @Component({
   selector: '[app-navbar-item]',
-  imports: [NgClass, NgTemplateOutlet],
+  imports: [NgClass, NavbarItemSpaceComponent, NgTemplateOutlet],
   template: `
     <!-- TODO: QUE RECIBA POR PROPS SI MUESTRA ICONO -->
     @let withIcon = (item()?.icon || icon()) && showIcon();
 
     @if (withIcon) {
       <div
-        class="grid size-[var(--sidebar-item-size)] place-content-center p-1.5 *:size-full *:max-h-6 *:max-w-6"
+        app-navbar-item-space
+        class="grid place-content-center p-1.5 *:max-h-6 *:max-w-6"
       >
         @if (icon()) {
           <ng-container [ngTemplateOutlet]="icon()!" />
@@ -51,7 +53,8 @@ import { MenuItem } from '@core/config/nav-bar-items';
     <!-- BOTON EXTRA -->
     @if (button()) {
       <div
-        class="grid size-[var(--sidebar-item-size)] shrink-0 place-content-center p-1.5 transition-[opacity] duration-200 *:size-full *:max-h-6 *:max-w-6"
+        app-navbar-item-space
+        class="transition-[opacity] duration-200"
         [ngClass]="{ 'opacity-0': isCollapsed() }"
       >
         @if (button()) {
@@ -83,7 +86,7 @@ import { MenuItem } from '@core/config/nav-bar-items';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'h-[var(--sidebar-item-size)] flex-1 grid grid-cols-[auto_1fr_auto] items-center group/item hover:bg-border/60 rounded-md',
+      'h-[var(--sidebar-item-size)] flex-1 grid grid-cols-[auto_1fr_auto] items-center group/item hover:bg-border/60 rounded-md overflow-hidden',
   },
 })
 export class NavbarItemComponent {
