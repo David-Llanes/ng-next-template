@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
 import { LayoutService } from '@core/services/layout.service';
 import { SidebarService } from '@core/services/sidebar.service';
 
@@ -28,6 +29,5 @@ export class SidebarProviderComponent {
   private sidebarService = inject(SidebarService);
 
   isCollapsed = this.sidebarService.isStaticCollapsed;
-
   layoutMode = this.layoutService.layoutMode;
 }

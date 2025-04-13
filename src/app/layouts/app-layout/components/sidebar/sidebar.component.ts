@@ -1,4 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+
 import { SidebarService } from '@core/services/sidebar.service';
 
 @Component({
@@ -49,6 +53,22 @@ import { SidebarService } from '@core/services/sidebar.service';
 })
 export class SidebarComponent {
   private sidebarService = inject(SidebarService);
+  private router = inject(Router);
+
+  constructor() {
+    // Close sidebar after navigationEnd only when isOverlayActive
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntilDestroyed()
+      )
+      .subscribe(params => {
+        if (this.sidebarService.isOverlayActive()) {
+          console.log(params.urlAfterRedirects);
+          this.toggleSidebar();
+        }
+      });
+  }
 
   toggleSidebar() {
     this.sidebarService.toggleSidebar();
