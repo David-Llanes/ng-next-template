@@ -17,11 +17,9 @@
     "module": "ES2022",
     "baseUrl": "./",
     "paths": {
-      "@application/*": ["src/app/application/*"],
       "@core/*": ["src/app/core/*"],
       "@domain/*": ["src/app/domain/*"],
       "@features/*": ["src/app/features/*"],
-      "@infrastructure/*": ["src/app/infrastructure/*"],
       "@layouts/*": ["src/app/layouts/*"],
       "@shared/*": ["src/app/shared/*"],
       "@state/*": ["src/app/state/*"],

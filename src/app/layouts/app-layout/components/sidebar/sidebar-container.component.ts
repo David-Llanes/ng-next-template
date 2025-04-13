@@ -9,8 +9,8 @@ import {
   SidebarService,
   Variant,
 } from '@core/services/sidebar.service';
-import { NavbarItemComponent } from '../navbar/navbar-item.component';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { NavbarItemComponent } from '@shared/components/navbar/navbar-item.component';
+import { NavbarComponent } from '@shared/components/navbar/navbar.component';
 import {
   SidebarComponent,
   SidebarContentComponent,
