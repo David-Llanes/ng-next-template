@@ -13,7 +13,6 @@ import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
 import { NavbarItemComponent } from './navbar-item.component';
 
-// TODO: CSS CLAS FOR routerLinkActive and group-has-[&_a.text-primary]
 @Component({
   selector: 'app-navbar-node',
   imports: [RouterLink, RouterLinkActive, NgClass, NavbarItemComponent],
@@ -31,7 +30,7 @@ import { NavbarItemComponent } from './navbar-item.component';
           [item]="localItem"
           [showIcon]="false"
           [routerLink]="localItem.routerLink"
-          routerLinkActive="text-primary hover:bg-transparent"
+          routerLinkActive="activeLink text-primary hover:bg-transparent"
           [routerLinkActiveOptions]="{ exact: false }"
           class="hover:bg-accent mb-1 overflow-hidden rounded-md"
         >
@@ -48,7 +47,7 @@ import { NavbarItemComponent } from './navbar-item.component';
         >
           <!-- COLLAPSIBLE NAV ITEM -->
           <div
-            class="group-has-[&_a.text-primary]/collapsible:text-primary flex size-full items-center overflow-hidden rounded-md group-has-[&_a.text-primary]/collapsible:font-semibold"
+            class="group-has-[&_a.activeLink]/collapsible:text-primary flex size-full items-center overflow-hidden rounded-md group-has-[&_a.activeLink]/collapsible:font-semibold"
           >
             @if (isGroupClickable) {
               <!-- IF IT HAS ITEMS BUT IS ALSO LINK -->
