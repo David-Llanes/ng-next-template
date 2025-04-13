@@ -9,11 +9,11 @@ import {
 
 import { MenuItem } from '@core/config/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
-import { NavbarItemComponent } from './navbar-item.component';
+import { NavbarNodeComponent } from './navbar-node.component';
 
 @Component({
   selector: 'app-navbar-group',
-  imports: [NavbarItemComponent, NgClass],
+  imports: [NavbarNodeComponent, NgClass],
   template: `
     <span
       class="text-muted-foreground list-none overflow-hidden text-[10px] font-bold uppercase transition-all duration-200"
@@ -26,7 +26,7 @@ import { NavbarItemComponent } from './navbar-item.component';
 
     <ul class="grid">
       @for (item of items(); track item.key) {
-        <app-navbar-item [item]="item" />
+        <app-navbar-node [item]="item" />
       }
     </ul>
   `,

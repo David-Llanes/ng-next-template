@@ -18,7 +18,7 @@ export const NAVIGATION_GROUPS: NavigationGroup[] = [
     items: [
       {
         url: 'admin',
-        key: 'Administrador borrame borrame',
+        key: 'Administrador',
         icon: 'fa-solid fa-user-cog',
         items: [
           {
@@ -52,7 +52,7 @@ export const NAVIGATION_GROUPS: NavigationGroup[] = [
           {
             url: 'patient/patient-records',
             routerLink: 'patient/patient-records',
-            key: 'Expedientes de pacientes borrame borrame',
+            key: 'Expedientes de pacientes',
             icon: 'fa-solid fa-book',
             isLink: true,
           },
