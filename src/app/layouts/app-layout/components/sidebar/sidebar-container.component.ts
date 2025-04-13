@@ -1,12 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
-import { LayoutMode } from '@core/services/layout.service';
+import { LayoutService } from '@core/services/layout.service';
 import {
   DataCollapsible,
   DataState,
@@ -14,10 +9,14 @@ import {
   SidebarService,
   Variant,
 } from '@core/services/sidebar.service';
-import { SidebarContentComponent } from './sidebar-content.component';
-import { SidebarFooterComponent } from './sidebar-footer.component';
-import { SidebarHeaderComponent } from './sidebar-header.component';
-import { SidebarComponent } from './sidebar.component';
+import { NavbarItemComponent } from '../navbar/navbar-item.component';
+import { NavbarComponent } from '../navbar/navbar.component';
+import {
+  SidebarComponent,
+  SidebarContentComponent,
+  SidebarFooterComponent,
+  SidebarHeaderComponent,
+} from './sidebar.component';
 
 @Component({
   selector: 'app-sidebar-container',
@@ -26,26 +25,72 @@ import { SidebarComponent } from './sidebar.component';
     SidebarHeaderComponent,
     SidebarContentComponent,
     SidebarFooterComponent,
+    NavbarComponent,
+    NavbarItemComponent,
+    RouterLink,
+    RouterLinkActive,
   ],
   template: `
     <app-sidebar>
-      <app-sidebar-header>
-        <header class="flex bg-green-200 p-2">HEADER</header>
+      <app-sidebar-header class="h-[var(--sidebar-width-icon)]">
+        <header class="h-full content-center">HEADER</header>
       </app-sidebar-header>
 
-      <app-sidebar-content class="grow">
-        <nav
-          class="flex min-h-0 flex-1 flex-col gap-0 overflow-auto group-data-[collapsible=icon]:overflow-hidden"
-        >
-          <button class="m-2 cursor-pointer border bg-yellow-500 p-4 shadow-md">
-            Hola
-          </button>
-          <a href="https://www.google.com" target="_blank">Google</a>
-        </nav>
+      <app-sidebar-content>
+        <app-navbar />
       </app-sidebar-content>
 
-      <app-sidebar-footer>
-        <footer class="h-16 bg-red-300">FOOTER</footer>
+      <app-sidebar-footer class="h-[var(--sidebar-width-icon)]">
+        <footer class="h-full content-center overflow-hidden">
+          <a
+            app-navbar-item
+            [icon]="icon"
+            [button]="button"
+            [isCollapsed]="isCollapsed()"
+            label="Configuración"
+            [routerLink]="'settings'"
+            routerLinkActive="text-primary hover:bg-transparent font-semibold"
+            class="text-sm"
+          >
+            <ng-template #icon>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="mx-auto transition-[rotate] hover:rotate-45"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path
+                  d="M14.647 4.081a.724 .724 0 0 0 1.08 .448c2.439 -1.485 5.23 1.305 3.745 3.744a.724 .724 0 0 0 .447 1.08c2.775 .673 2.775 4.62 0 5.294a.724 .724 0 0 0 -.448 1.08c1.485 2.439 -1.305 5.23 -3.744 3.745a.724 .724 0 0 0 -1.08 .447c-.673 2.775 -4.62 2.775 -5.294 0a.724 .724 0 0 0 -1.08 -.448c-2.439 1.485 -5.23 -1.305 -3.745 -3.744a.724 .724 0 0 0 -.447 -1.08c-2.775 -.673 -2.775 -4.62 0 -5.294a.724 .724 0 0 0 .448 -1.08c-1.485 -2.439 1.305 -5.23 3.744 -3.745a.722 .722 0 0 0 1.08 -.447c.673 -2.775 4.62 -2.775 5.294 0zm-2.647 4.919a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"
+                />
+              </svg>
+            </ng-template>
+
+            <ng-template #button>
+              <button class="cursor-pointer p-1.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-full"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                  <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                  <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+                </svg>
+              </button>
+            </ng-template>
+          </a>
+        </footer>
       </app-sidebar-footer>
     </app-sidebar>
   `,
@@ -58,13 +103,14 @@ import { SidebarComponent } from './sidebar.component';
     '[attr.data-mode]': 'dataMode()',
     '[attr.data-state]': 'dataState()',
     '[attr.data-collapsible]': 'dataCollapsible()',
-    '[attr.data-layout]': 'layoutMode()',
+    '[attr.data-layout]': 'dataLayout()',
   },
 })
 export class SidebarContainerComponent {
   private sidebarService = inject(SidebarService);
+  private layoutService = inject(LayoutService);
 
-  layoutMode = input.required<LayoutMode | undefined>();
+  dataLayout = this.layoutService.layoutMode;
 
   dataVariant = computed<Variant | ''>(() => {
     return this.sidebarService.variant() ?? '';
@@ -97,132 +143,5 @@ export class SidebarContainerComponent {
     return '';
   });
 
-  data = {
-    user: {
-      name: 'shadcn',
-      email: 'm@example.com',
-      avatar: '/avatars/shadcn.jpg',
-    },
-    teams: [
-      {
-        name: 'Acme Inc',
-        logo: '',
-        plan: 'Enterprise',
-      },
-      {
-        name: 'Acme Corp.',
-        logo: '',
-        plan: 'Startup',
-      },
-      {
-        name: 'Evil Corp.',
-        logo: '',
-        plan: 'Free',
-      },
-    ],
-    navMain: [
-      {
-        title: 'Playground',
-        url: '#',
-        icon: '',
-        isActive: true,
-        items: [
-          {
-            title: 'History',
-            url: '#',
-          },
-          {
-            title: 'Starred',
-            url: '#',
-          },
-          {
-            title: 'Settings',
-            url: '#',
-          },
-        ],
-      },
-      {
-        title: 'Models',
-        url: '#',
-        icon: '',
-        items: [
-          {
-            title: 'Genesis',
-            url: '#',
-          },
-          {
-            title: 'Explorer',
-            url: '#',
-          },
-          {
-            title: 'Quantum',
-            url: '#',
-          },
-        ],
-      },
-      {
-        title: 'Documentation',
-        url: '#',
-        icon: '',
-        items: [
-          {
-            title: 'Introduction',
-            url: '#',
-          },
-          {
-            title: 'Get Started',
-            url: '#',
-          },
-          {
-            title: 'Tutorials',
-            url: '#',
-          },
-          {
-            title: 'Changelog',
-            url: '#',
-          },
-        ],
-      },
-      {
-        title: 'Settings',
-        url: '#',
-        icon: '',
-        items: [
-          {
-            title: 'General',
-            url: '#',
-          },
-          {
-            title: 'Team',
-            url: '#',
-          },
-          {
-            title: 'Billing',
-            url: '#',
-          },
-          {
-            title: 'Limits',
-            url: '#',
-          },
-        ],
-      },
-    ],
-    projects: [
-      {
-        name: 'Design Engineering',
-        url: '#',
-        icon: '',
-      },
-      {
-        name: 'Sales & Marketing',
-        url: '#',
-        icon: '',
-      },
-      {
-        name: 'Travel',
-        url: '#',
-        icon: '',
-      },
-    ],
-  };
+  isCollapsed = computed(() => this.sidebarService.isStaticCollapsed());
 }
