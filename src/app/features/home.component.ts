@@ -7,7 +7,7 @@ import { SidebarService } from '@core/services/sidebar.service';
   selector: 'app-home',
   imports: [],
   template: `
-    <div class="wrapper grid gap-6 py-6 text-black">
+    <div class="wrapper text-foreground grid gap-6 py-6">
       <!-- LAYOUT MODE -->
       <section class="relative flex flex-col gap-6 rounded-lg border p-4">
         <button
