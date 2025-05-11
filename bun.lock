@@ -16,11 +16,13 @@
         "@angular/router": "^19.2.5",
         "@angular/ssr": "^19.2.6",
         "@ngrx/signals": "^19.1.0",
+        "@primeng/themes": "^19.1.2",
         "@tailwindcss/postcss": "^4.0.14",
         "express": "^4.18.2",
         "husky": "^9.1.7",
         "lint-staged": "^15.5.0",
         "postcss": "^8.5.3",
+        "primeng": "^19.1.2",
         "rxjs": "~7.8.0",
         "tailwindcss": "^4.0.14",
         "tslib": "^2.3.0",
@@ -536,6 +538,12 @@
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.5.1", "", { "os": "win32", "cpu": "x64" }, "sha512-9lHBdJITeNR++EvSQVUcaZoWupyHfXe1jZvGZ06O/5MflPcuPLtEphScIBL+AiCWBO46tDSHzWyD0uDmmZqsgA=="],
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
+
+    "@primeng/themes": ["@primeng/themes@19.1.2", "", { "dependencies": { "@primeuix/styled": "^0.3.2" } }, "sha512-6q6jYks+S9+oqJUtsBKSAt9PdO2eUIkYyg4qGZAF2Dsp7YZ5nt4W/S5JUjxEDEjrtwUe+uDLeQr7PxNJErN4Gg=="],
+
+    "@primeuix/styled": ["@primeuix/styled@0.3.2", "", { "dependencies": { "@primeuix/utils": "^0.3.2" } }, "sha512-ColZes0+/WKqH4ob2x8DyNYf1NENpe5ZguOvx5yCLxaP8EIMVhLjWLO/3umJiDnQU4XXMLkn2mMHHw+fhTX/mw=="],
+
+    "@primeuix/utils": ["@primeuix/utils@0.3.2", "", {}, "sha512-B+nphqTQeq+i6JuICLdVWnDMjONome2sNz0xI65qIOyeB4EF12CoKRiCsxuZ5uKAkHi/0d1LqlQ9mIWRSdkavw=="],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.34.8", "", { "os": "android", "cpu": "arm" }, "sha512-q217OSE8DTp8AFHuNHXo0Y86e1wtlfVrXiAlwkIvGRQv9zbc6mE3sjIVfwI8sYUyNxwOg0j/Vm1RKM04JcWLJw=="],
 
@@ -1550,6 +1558,8 @@
     "prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
 
     "prettier-plugin-tailwindcss": ["prettier-plugin-tailwindcss@0.6.11", "", { "peerDependencies": { "@ianvs/prettier-plugin-sort-imports": "*", "@prettier/plugin-pug": "*", "@shopify/prettier-plugin-liquid": "*", "@trivago/prettier-plugin-sort-imports": "*", "@zackad/prettier-plugin-twig": "*", "prettier": "^3.0", "prettier-plugin-astro": "*", "prettier-plugin-css-order": "*", "prettier-plugin-import-sort": "*", "prettier-plugin-jsdoc": "*", "prettier-plugin-marko": "*", "prettier-plugin-multiline-arrays": "*", "prettier-plugin-organize-attributes": "*", "prettier-plugin-organize-imports": "*", "prettier-plugin-sort-imports": "*", "prettier-plugin-style-order": "*", "prettier-plugin-svelte": "*" }, "optionalPeers": ["@ianvs/prettier-plugin-sort-imports", "@prettier/plugin-pug", "@shopify/prettier-plugin-liquid", "@trivago/prettier-plugin-sort-imports", "@zackad/prettier-plugin-twig", "prettier-plugin-astro", "prettier-plugin-css-order", "prettier-plugin-import-sort", "prettier-plugin-jsdoc", "prettier-plugin-marko", "prettier-plugin-multiline-arrays", "prettier-plugin-organize-attributes", "prettier-plugin-organize-imports", "prettier-plugin-sort-imports", "prettier-plugin-style-order", "prettier-plugin-svelte"] }, "sha512-YxaYSIvZPAqhrrEpRtonnrXdghZg1irNg4qrjboCXrpybLWVs55cW2N3juhspVJiO0JBvYJT8SYsJpc8OQSnsA=="],
+
+    "primeng": ["primeng@19.1.2", "", { "dependencies": { "@primeuix/styled": "^0.3.2", "@primeuix/utils": "^0.3.2", "tslib": "^2.3.0" }, "peerDependencies": { "@angular/animations": "^19.0.0", "@angular/cdk": "^19.0.0", "@angular/common": "^19.0.0", "@angular/core": "^19.0.0", "@angular/forms": "^19.0.0", "@angular/platform-browser": "^19.0.0", "@angular/router": "^19.0.0", "rxjs": "^6.0.0 || ^7.8.1" } }, "sha512-iu4lDrStBPCyYn+iSfofp/Hsv/dHVlnlsOhqFZlYTQB1o+MlVXa4PanLgHdoBr1thy3ozRkNDZHsICkUecWu0A=="],
 
     "proc-log": ["proc-log@5.0.0", "", {}, "sha512-Azwzvl90HaF0aCz1JrDdXQykFakSSNPaPoiZ9fm5qJIMHioDZEi7OAdRwSm6rSoPtY3Qutnm3L7ogmg3dc+wbQ=="],
 

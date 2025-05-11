@@ -8,10 +8,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { provideAppDependencies } from '@core/config/providers/app-dependencies.provider';
+import { provideAppPrimeNg } from '@core/config/providers/prime-ng.provider';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // ANGULAR PROVIDERS
     provideExperimentalZonelessChangeDetection(),
     provideHttpClient(withFetch()),
     provideRouter(
@@ -23,6 +25,8 @@ export const appConfig: ApplicationConfig = {
     ),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
+    // APPLICATION PROVIDERS
     provideAppDependencies(),
+    provideAppPrimeNg(),
   ],
 };

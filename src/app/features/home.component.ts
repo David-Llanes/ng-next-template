@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 
 import { LayoutService } from '@core/services/layout.service';
 import { SidebarService } from '@core/services/sidebar.service';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [DialogModule, ButtonModule],
   template: `
     <div class="wrapper text-foreground grid gap-6 py-6">
       <!-- LAYOUT MODE -->
@@ -151,6 +153,28 @@ import { SidebarService } from '@core/services/sidebar.service';
             </div>
           </div>
         </div>
+
+        <p-button (click)="showDialog()" label="Show" />
+        <p-dialog
+          header="Edit Profile"
+          [modal]="true"
+          [(visible)]="visible"
+          [style]="{ width: '25rem' }"
+        >
+          <span class="p-text-secondary mb-8 block">Update your information.</span>
+          <div class="mb-4 flex items-center gap-4">
+            <label for="username" class="w-24 font-semibold">Username</label>
+            <input pInputText id="username" class="flex-auto" autocomplete="off" />
+          </div>
+          <div class="mb-8 flex items-center gap-4">
+            <label for="email" class="w-24 font-semibold">Email</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" />
+          </div>
+          <div class="flex justify-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+            <p-button label="Save" (click)="visible = false" />
+          </div>
+        </p-dialog>
       </section>
     </div>
   `,
@@ -160,4 +184,10 @@ import { SidebarService } from '@core/services/sidebar.service';
 export class HomeComponent {
   layoutService = inject(LayoutService);
   sidebarService = inject(SidebarService);
+
+  visible = false;
+
+  showDialog() {
+    this.visible = true;
+  }
 }
