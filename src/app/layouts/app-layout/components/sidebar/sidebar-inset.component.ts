@@ -9,7 +9,7 @@ import { LayoutService } from '@core/services/layout.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class:
-      'bg-background relative flex w-full flex-1 overflow-hidden  transition-[margin] duration-200 md:peer-data-[layout=row]:peer-data-[variant=inset]:m-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:rounded-xl md:peer-data-[layout=row]:peer-data-[variant=inset]:shadow-sm',
+      'bg-background relative flex w-full flex-1 overflow-hidden transition-[margin] duration-200 md:peer-data-[layout=row]:peer-data-[variant=inset]:ml-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:mt-2 md:peer-data-[layout=row]:peer-data-[variant=inset]:rounded-tl-xl md:peer-data-[layout=row]:peer-data-[variant=inset]:shadow-sm',
     '[class.flex-col]': 'layoutMode() !== "col"',
   },
 })
