@@ -26,4 +26,20 @@ export class ApiResponseMapper {
       numberPages: response.numberPages ?? 1,
     };
   }
+
+  static autoDetect<T>(
+    response: ApiResponseDTO<any>
+  ): ApiResponse<T> | ApiResponseWithPagination<T> {
+    const isPaginated =
+      response.totalRecords !== null &&
+      response.totalRecords !== undefined &&
+      response.pageNumber !== null &&
+      response.pageNumber !== undefined &&
+      response.numberPages !== null &&
+      response.numberPages !== undefined;
+
+    return isPaginated
+      ? this.fromApiPaginatedToDomain<T>(response)
+      : this.fromApiToDomain<T>(response);
+  }
 }

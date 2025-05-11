@@ -15,11 +15,13 @@ import { ApiResponseMapper } from '@infrastructure/common/mappers/api-response.m
 export class ApiErrorHandlerService {
   private logger = inject(Logger);
 
-  handleError<T>(error: HttpErrorResponse): Observable<ApiResponse<T>> {
+  handleError<T>(
+    error: HttpErrorResponse
+  ): Observable<ApiResponse<T> | ApiResponseWithPagination<T>> {
     if (error.error && error.error.success === false) {
       this.logger.log('HANDLE ERROR CAUGHT THIS ApiResponseDTO:', error.error);
 
-      const response = ApiResponseMapper.fromApiToDomain<T>(error.error);
+      const response = ApiResponseMapper.autoDetect<T>(error.error);
 
       this.logger.warn('⚠️ Business error from backend:', {
         url: error.url,
@@ -28,34 +30,13 @@ export class ApiErrorHandlerService {
 
       this.logger.log('HANDLE ERROR RETURNED THIS DOMAIN ENTITY:', response);
 
-      return of(response); // Returns an ApiResponse<T>.
+      return of(response);
     } else {
       return this.handleErrorHard(error);
     }
   }
 
-  handlePaginatedError<T>(
-    error: HttpErrorResponse
-  ): Observable<ApiResponseWithPagination<T>> {
-    if (error.error && error.error.success === false) {
-      this.logger.log('HANDLE PAGINATED ERROR CAUGHT THIS ApiResponseDTO:', error.error);
-
-      const response = ApiResponseMapper.fromApiPaginatedToDomain<T>(error.error);
-
-      this.logger.warn('⚠️ Business error from backend:', {
-        url: error.url,
-        response,
-      });
-
-      this.logger.log('HANDLE PAGINATED ERROR RETURNED THIS DOMAIN ENTITY:', response);
-
-      return of(response); // Returns an ApiResponseWithPagination<T>.
-    } else {
-      return this.handleErrorHard(error);
-    }
-  }
-
-  handleErrorHard(error: any): Observable<never> {
+  private handleErrorHard(error: any): Observable<never> {
     this.logger.error('💥 Critical error when making request:', {
       url: error?.url,
       status: error?.status,
