@@ -2,9 +2,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 
-import { Logger } from '../interfaces/logger.abstract';
-import { ApiResponseMapper } from '../mappers/api-response.mapper';
-import { ApiResponse, ApiResponseWithPagination } from '../models/api-response.model';
+import { Logger } from '@domain/common/interfaces/logger.abstract';
+import {
+  ApiResponse,
+  ApiResponseWithPagination,
+} from '@domain/common/models/api-response.model';
+import { ApiResponseMapper } from '@infrastructure/common/mappers/api-response.mapper';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +19,7 @@ export class ApiErrorHandlerService {
     if (error.error && error.error.success === false) {
       this.logger.log('HANDLE ERROR CAUGHT THIS ApiResponseDTO:', error.error);
 
-      const response = ApiResponseMapper.fromWrapper<T>(error.error);
+      const response = ApiResponseMapper.fromApiToDomain<T>(error.error);
 
       this.logger.warn('⚠️ Business error from backend:', {
         url: error.url,
@@ -37,7 +40,7 @@ export class ApiErrorHandlerService {
     if (error.error && error.error.success === false) {
       this.logger.log('HANDLE PAGINATED ERROR CAUGHT THIS ApiResponseDTO:', error.error);
 
-      const response = ApiResponseMapper.fromPaginatedWrapper<T>(error.error);
+      const response = ApiResponseMapper.fromApiPaginatedToDomain<T>(error.error);
 
       this.logger.warn('⚠️ Business error from backend:', {
         url: error.url,

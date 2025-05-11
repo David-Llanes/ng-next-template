@@ -1,10 +1,15 @@
 import { Injectable } from '@angular/core';
-import { QueryOptions, QueryOptionsFilter } from '../models/query-options.model';
+import { QueryBuilder } from '@domain/common/interfaces/query-builder.abstract';
+
+import {
+  QueryOptions,
+  QueryOptionsFilter,
+} from '@domain/common/models/query-options.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class QueryOptionsService {
+export class DevExtremeQueryBuilder extends QueryBuilder {
   buildQuery<T>(options: QueryOptions<T>): string {
     const queryParams: string[] = [];
 

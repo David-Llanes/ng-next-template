@@ -12,7 +12,6 @@ module.exports = tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      sheriff.configs.all,
     ],
     processor: angular.processInlineTemplates,
     rules: {

@@ -1,7 +1,7 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, TemplateRef } from '@angular/core';
 
-import { MenuItem } from '@core/config/nav-bar-items';
+import { MenuItem } from '@core/config/constants/nav-bar-items';
 import { NavbarItemSpaceComponent } from './navbar-item-space.component';
 
 @Component({

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NAVIGATION_GROUPS } from '@core/config/nav-bar-items';
+import { NAVIGATION_GROUPS } from '@core/config/constants/nav-bar-items';
 import { NavbarGroupComponent } from './navbar-group.component';
 
 @Component({

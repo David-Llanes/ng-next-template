@@ -7,7 +7,7 @@ import {
   input,
 } from '@angular/core';
 
-import { MenuItem } from '@core/config/nav-bar-items';
+import { MenuItem } from '@core/config/constants/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
 import { NavbarNodeComponent } from './navbar-node.component';
 

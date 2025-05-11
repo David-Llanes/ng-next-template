@@ -1,8 +1,11 @@
+import {
+  ApiResponse,
+  ApiResponseWithPagination,
+} from '@domain/common/models/api-response.model';
 import { ApiResponseDTO } from '../dto/api-response.dto';
-import { ApiResponse, ApiResponseWithPagination } from '../models/api-response.model';
 
 export class ApiResponseMapper {
-  static fromWrapper<T>(response: ApiResponseDTO<any>): ApiResponse<T> {
+  static fromApiToDomain<T>(response: ApiResponseDTO<any>): ApiResponse<T> {
     return {
       result: response.result ?? null,
       success: response.success ?? false,
@@ -11,11 +14,11 @@ export class ApiResponseMapper {
     };
   }
 
-  static fromPaginatedWrapper<T>(
+  static fromApiPaginatedToDomain<T>(
     response: ApiResponseDTO<any>
   ): ApiResponseWithPagination<T> {
     return {
-      ...this.fromWrapper<T>(response),
+      ...this.fromApiToDomain<T>(response),
       currentPage: response.pageNumber ?? 1,
       pageSize: response.numberRecords ?? 0,
       totalRecords: response.totalRecords ?? 0,

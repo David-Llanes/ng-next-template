@@ -7,8 +7,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
-import { provideAppDependencies } from '@core/config/providers/app-dependencies.provider';
-import { provideAppPrimeNg } from '@core/config/providers/prime-ng.provider';
+import { provideAppDependencies, provideAppPrimeNg } from '@core/config/providers';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {

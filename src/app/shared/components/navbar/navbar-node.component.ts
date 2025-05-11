@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
-import { MenuItem } from '@core/config/nav-bar-items';
+import { MenuItem } from '@core/config/constants/nav-bar-items';
 import { SidebarService } from '@core/services/sidebar.service';
 import { NavbarItemComponent } from './navbar-item.component';
 
