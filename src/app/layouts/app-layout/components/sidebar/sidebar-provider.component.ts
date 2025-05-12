@@ -15,6 +15,7 @@ import { SidebarService } from '@core/services/sidebar.service';
     '[class.flex-col]': 'layoutMode() === "col"',
     '[style.--topbar-height]': '"3.5rem"',
     '[style.--sidebar-width]': '"16rem"',
+    '[style.--space-around]': '"0.5rem"',
     '[style.--sidebar-width-icon]': '"3rem"',
     '[style.--sidebar-item-size]': '"2rem"',
     '[style.--sidebar-padding-collapsed]':
